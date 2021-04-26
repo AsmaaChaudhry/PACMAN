@@ -56,9 +56,13 @@ public class Board extends JPanel implements ActionListener {
                 posX = posX - 2;
             } else if (key == KeyEvent.VK_RIGHT && posX < d.width - 36) {
                 posX = posX + 2;
-            } else if (key == KeyEvent.VK_UP && posY > 0) {
+            }
+            // Up
+            else if (key == KeyEvent.VK_UP && posY > 0) {
             	posY = posY - 2;
-            } else if (key == KeyEvent.VK_DOWN && posY < d.height - 110) {
+            }
+            // Down - This is essentially guess work
+            else if (key == KeyEvent.VK_DOWN && posY < d.height - 110) {
             	posY = posY + 2;
             }
             repaint();

@@ -1,5 +1,5 @@
 package basecode;
-
+ 
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -23,7 +23,7 @@ public class BlobAnimation extends JFrame {
     }
 
     public static void main(String[] args) {
-        BlobAnimation myGame = new BlobAnimation();
-        
-    }
+		BlobAnimation myGame = new BlobAnimation();
+
+	}
 }

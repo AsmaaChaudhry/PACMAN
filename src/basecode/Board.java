@@ -15,90 +15,83 @@ import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-
 public class Board extends JPanel implements ActionListener {
 
-    private Dimension d;
-    private int livesLeft;
-    private int posX, posY;
-    
-    private Image blob = new ImageIcon("src/images/blob.png").getImage();    
-    
-    
+	private Dimension d;
+	private int livesLeft;
+	private int posX, posY;
 
-    public Board(int w, int h) {
-        
-        d = new Dimension(w, h);
-        livesLeft = 3; 
-        posX = 10;
-        posY = 10;
-            
-        addKeyListener(new Keyboard());
-        setFocusable(true);
-        setBackground(Color.white);  
-    }
+	private Image blob = new ImageIcon("src/images/PacManResting.png").getImage();
 
+	public Board(int w, int h) {
 
-    @Override
-    public void addNotify() {
-        super.addNotify();
-    }
+		d = new Dimension(w, h);
+		livesLeft = 3;
+		posX = 10;
+		posY = 10;
 
-    
-    class Keyboard extends KeyAdapter {
+		addKeyListener(new Keyboard());
+		setFocusable(true);
+		setBackground(Color.white);
+	}
 
-        @Override
-        public void keyPressed(KeyEvent e) {
+	@Override
+	public void addNotify() {
+		super.addNotify();
+	}
 
-            int key = e.getKeyCode();
+	class Keyboard extends KeyAdapter {
 
-            if (key == KeyEvent.VK_LEFT && posX > 0) {
-                posX = posX - 2;
-            } else if (key == KeyEvent.VK_RIGHT && posX < d.width - 36) {
-                posX = posX + 2;
-            }
-            // Up
-            else if (key == KeyEvent.VK_UP && posY > 0) {
-            	posY = posY - 2;
-            }
-            // Down - This is essentially guess work
-            else if (key == KeyEvent.VK_DOWN && posY < d.height - 110) {
-            	posY = posY + 2;
-            }
-            repaint();
-        }
+		@Override
+		public void keyPressed(KeyEvent e) {
 
-    }
-    
+			int key = e.getKeyCode();
 
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
+			if (key == KeyEvent.VK_LEFT && posX > 0) {
+				posX = posX - 2;
+			} else if (key == KeyEvent.VK_RIGHT && posX < d.width - 36) {
+				posX = posX + 2;
+			}
+			// Up
+			else if (key == KeyEvent.VK_UP && posY > 0) {
+				posY = posY - 2;
+			}
+			// Down - This is essentially guess work
+			else if (key == KeyEvent.VK_DOWN && posY < d.height - 110) {
+				posY = posY + 2;
+			}
+			repaint();
+		}
 
-        Font smallFont = new Font("Helvetica", Font.BOLD, 14);
-        Graphics2D g2d = (Graphics2D) g;
+	}
 
-        g2d.setColor(Color.black);
-        g2d.fillRect(0, 0, d.width, d.height);
-        g2d.drawImage(blob, posX, posY, this);
-        
-        g2d.setFont(smallFont);
-        g2d.setColor(Color.white);
-        g2d.drawString("Score: 0 ", 276, 355);
-        g2d.drawString("Lives Left: ", 10, 355);
-        
-        for (short i = 0; i < livesLeft; i++) {
-            g2d.drawImage(blob, i*28+ 90, 340, this);
-        }
-        
-        Toolkit.getDefaultToolkit().sync();
-        g2d.dispose();
-    }
+	@Override
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
 
+		Font smallFont = new Font("Helvetica", Font.BOLD, 14);
+		Graphics2D g2d = (Graphics2D) g;
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
+		g2d.setColor(Color.black);
+		g2d.fillRect(0, 0, d.width, d.height);
+		g2d.drawImage(blob, posX, posY, this);
 
-        repaint();
-    }
+		g2d.setFont(smallFont);
+		g2d.setColor(Color.white);
+		g2d.drawString("Score: 0 ", 276, 355);
+		g2d.drawString("Lives Left: ", 10, 355);
+
+		for (short i = 0; i < livesLeft; i++) {
+			g2d.drawImage(blob, i * 28 + 90, 340, this);
+		}
+
+		Toolkit.getDefaultToolkit().sync();
+		g2d.dispose();
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+
+		repaint();
+	}
 }

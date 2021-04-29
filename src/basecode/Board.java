@@ -50,18 +50,18 @@ public class Board extends JPanel implements ActionListener {
 
 			int key = e.getKeyCode();
 
-			if (key == KeyEvent.VK_LEFT && posX > 0) {
+			if (key == KeyEvent.VK_LEFT && posX > 3) {
 				posX = posX - 7;
 				pacMan = new ImageIcon("src/images/PacManLeft.gif").getImage();
-			} else if (key == KeyEvent.VK_RIGHT && posX < d.width - 36) {
+			} else if (key == KeyEvent.VK_RIGHT && posX < d.width - 27) {
 				posX = posX + 7;
 				pacMan = new ImageIcon("src/images/PacManRight.gif").getImage();
 			}
-			else if (key == KeyEvent.VK_UP && posY > 0) {
+			else if (key == KeyEvent.VK_UP && posY > 5) {
 				posY = posY - 7;
 				pacMan = new ImageIcon("src/images/PacManUp.gif").getImage();
 			}
-			else if (key == KeyEvent.VK_DOWN && posY < d.height - 110) {
+			else if (key == KeyEvent.VK_DOWN && posY < d.height - 118) {
 				posY = posY + 7;
 				pacMan = new ImageIcon("src/images/PacManDown.gif").getImage();
 			}

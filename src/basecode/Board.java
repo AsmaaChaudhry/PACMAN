@@ -91,8 +91,9 @@ public class Board extends JPanel implements ActionListener {
 		for (short i = 0; i < livesLeft; i++) {
 			g2d.drawImage(livesIcon, i * 28 + 90, 340, this);
 			g2d.drawRoundRect(1, 1, 378, 329, 1, 1); //sets game bounds -Liz
-			g2d.drawRoundRect(45, 1, 250, 35, 1, 1);
-			g2d.drawRoundRect(240, 100, 75, 75, 1, 1);
+			g2d.drawRoundRect(240, 70, 75, 75, 1, 1);//Maze Left Eye
+			g2d.drawRoundRect(75, 70, 75, 75, 1, 1);//Maze Right Eye
+			g2d.drawRoundRect(135, 210, 120, 60, 1, 1);
 		}
 
 		Toolkit.getDefaultToolkit().sync();

@@ -64,18 +64,18 @@ public class Board extends JPanel implements ActionListener {
 
 			int key = e.getKeyCode();
 
-			if (key == KeyEvent.VK_LEFT && posX > 3) {
+			if (key == KeyEvent.VK_LEFT && posX > 7) {
 				posX = posX - bSize;
 				// is posX allowed/is this a maze block?
 				// is pellet eaten?
 				pacMan = new ImageIcon("src/images/PacManLeft.gif").getImage();
-			} else if (key == KeyEvent.VK_RIGHT && posX < d.width - 27) {
+			} else if (key == KeyEvent.VK_RIGHT && posX < d.width - 36) {
 				posX = posX + bSize;
 				pacMan = new ImageIcon("src/images/PacManRight.gif").getImage();
-			} else if (key == KeyEvent.VK_UP && posY > 5) {
+			} else if (key == KeyEvent.VK_UP && posY > 10) {
 				posY = posY - bSize;
 				pacMan = new ImageIcon("src/images/PacManUp.gif").getImage();
-			} else if (key == KeyEvent.VK_DOWN && posY < d.height - 118) {
+			} else if (key == KeyEvent.VK_DOWN && posY < d.height - 110) {
 				posY = posY + bSize;
 				pacMan = new ImageIcon("src/images/PacManDown.gif").getImage();
 //			else if(key == KeyEvent.VK_ESCAPE) {

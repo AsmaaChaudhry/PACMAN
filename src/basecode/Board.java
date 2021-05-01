@@ -20,11 +20,26 @@ public class Board extends JPanel implements ActionListener {
 
 	private Dimension d;
 	private int livesLeft;
-	private int posX, posY;
+	private int posX, posY; // put in PacMan class
+
+	private Timer t;
 
 	private Image pacMan = new ImageIcon("src/images/PacManRight.gif").getImage();
 	private Image livesIcon = new ImageIcon("src/images/PacManResting.png").getImage();
 	private Image pellet = new ImageIcon("src/images/Pellet.png").getImage();
+	private int bSize;
+	private final int NUM_BLOCKS = 15;
+	private final int MAX_GHOSTS = 13;
+
+	private int[][] grid = { { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, 1, 1, 1 },
+			{ 1, 1, 1, -1, -1, -1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, { 1, 1, 1, -1, -1, -1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+			{ 1, 1, 1, -1, -1, -1, 1, 1, 1, -1, -1, -1, -1, 1, 1 }, { 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, -1, -1, -1, 1, 1 },
+			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, -1, -1, -1, 1, 1 }, { 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, -1, -1, -1, 1, 1 },
+			{ 1, 1, 1, -1, -1, -1, 1, 1, 1, -1, -1, -1, -1, 1, 1 },
+			{ 1, 1, 1, -1, -1, -1, 1, 1, 1, -1, -1, -1, -1, 1, 1 }, { 1, 1, 1, -1, -1, -1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, 1, 1, 1 }, { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 } };
 
 	public Board(int w, int h) {
 
@@ -36,11 +51,10 @@ public class Board extends JPanel implements ActionListener {
 		addKeyListener(new Keyboard());
 		setFocusable(true);
 		setBackground(Color.white);
-	}
+		t = new Timer(40, this);
+		t.start();
 
-	@Override
-	public void addNotify() {
-		super.addNotify();
+		bSize = Math.min(420 / 15, 380 / 15);
 	}
 
 	class Keyboard extends KeyAdapter {
@@ -51,19 +65,27 @@ public class Board extends JPanel implements ActionListener {
 			int key = e.getKeyCode();
 
 			if (key == KeyEvent.VK_LEFT && posX > 3) {
-				posX = posX - 7;
+				posX = posX - bSize;
+				// is posX allowed/is this a maze block?
+				// is pellet eaten?
 				pacMan = new ImageIcon("src/images/PacManLeft.gif").getImage();
 			} else if (key == KeyEvent.VK_RIGHT && posX < d.width - 27) {
-				posX = posX + 7;
+				posX = posX + bSize;
 				pacMan = new ImageIcon("src/images/PacManRight.gif").getImage();
-			}
-			else if (key == KeyEvent.VK_UP && posY > 5) {
-				posY = posY - 7;
+			} else if (key == KeyEvent.VK_UP && posY > 5) {
+				posY = posY - bSize;
 				pacMan = new ImageIcon("src/images/PacManUp.gif").getImage();
-			}
-			else if (key == KeyEvent.VK_DOWN && posY < d.height - 118) {
-				posY = posY + 7;
+			} else if (key == KeyEvent.VK_DOWN && posY < d.height - 118) {
+				posY = posY + bSize;
 				pacMan = new ImageIcon("src/images/PacManDown.gif").getImage();
+//			else if(key == KeyEvent.VK_ESCAPE) {
+//				//quit the game
+//			}
+//			else if(key == KeyEvent.VK_SPACE) {
+//				//pause game
+//				//stop timer
+//				//pop up window saying game is paused??
+//			}
 			}
 			repaint();
 		}
@@ -79,20 +101,32 @@ public class Board extends JPanel implements ActionListener {
 
 		g2d.setColor(Color.black);
 		g2d.fillRect(0, 0, d.width, d.height);
+
+		// draw grid
+		g2d.setColor(Color.green);
+		for (int i = 0; i < NUM_BLOCKS; i++) {
+			for (int j = 0; j < NUM_BLOCKS; j++) {
+				if (grid[i][j] == -1) {
+					g2d.fillRoundRect(i * bSize, j * bSize, bSize, bSize, 1, 1);
+					;
+				} // draw wall
+				else if (grid[i][j] == 1) {
+					g2d.drawImage(pellet, i * bSize, j * bSize, this);
+				} // draw pellet
+			}
+		}
+
 		g2d.drawImage(pacMan, posX, posY, this);
 
 		g2d.setFont(smallFont);
 		g2d.setColor(Color.white);
 		g2d.drawString("Score: 0 ", 276, 355);
 		g2d.drawString("Lives Left: ", 10, 355);
-		
+
 		g2d.setColor(Color.green);
 
 		for (short i = 0; i < livesLeft; i++) {
 			g2d.drawImage(livesIcon, i * 28 + 90, 340, this);
-			g2d.drawRoundRect(1, 1, 378, 329, 1, 1); //sets game bounds -Liz
-			g2d.drawRoundRect(45, 1, 250, 35, 1, 1);
-			g2d.drawRoundRect(240, 100, 75, 75, 1, 1);
 		}
 
 		Toolkit.getDefaultToolkit().sync();
@@ -101,7 +135,7 @@ public class Board extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
+		// update ghost position
 		repaint();
 	}
 }

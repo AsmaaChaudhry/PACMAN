@@ -25,7 +25,5 @@ public class BlobAnimation extends JFrame {
     public static void main(String[] args) {
 		BlobAnimation myGame = new BlobAnimation();
 
-		
-		
 	}
 }

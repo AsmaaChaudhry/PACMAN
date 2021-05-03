@@ -137,5 +137,6 @@ public class Board extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		// update ghost position
 		repaint();
+		
 	}
 }

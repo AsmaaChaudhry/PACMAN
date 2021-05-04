@@ -54,7 +54,7 @@ public class Board extends JPanel implements ActionListener {
 		t = new Timer(40, this);
 		t.start();
 
-		bSize = Math.min(420 / 15, 380 / 15);
+		bSize = Math.min(360 / 15, 360 / 15);
 	}
 
 	class Keyboard extends KeyAdapter {
@@ -64,19 +64,19 @@ public class Board extends JPanel implements ActionListener {
 
 			int key = e.getKeyCode();
 
-			if (key == KeyEvent.VK_LEFT && posX > 7) {
-				posX = posX - bSize;
+			if (key == KeyEvent.VK_LEFT && posX > 10) {
+				posX = posX - 6;
 				// is posX allowed/is this a maze block?
 				// is pellet eaten?
 				pacMan = new ImageIcon("src/images/PacManLeft.gif").getImage();
-			} else if (key == KeyEvent.VK_RIGHT && posX < d.width - 36) {
-				posX = posX + bSize;
+			} else if (key == KeyEvent.VK_RIGHT && posX < d.width - 35) {
+				posX = posX + 6;
 				pacMan = new ImageIcon("src/images/PacManRight.gif").getImage();
 			} else if (key == KeyEvent.VK_UP && posY > 10) {
-				posY = posY - bSize;
+				posY = posY - 6;
 				pacMan = new ImageIcon("src/images/PacManUp.gif").getImage();
-			} else if (key == KeyEvent.VK_DOWN && posY < d.height - 110) {
-				posY = posY + bSize;
+			} else if (key == KeyEvent.VK_DOWN && posY < d.height - 75) {
+				posY = posY + 6;
 				pacMan = new ImageIcon("src/images/PacManDown.gif").getImage();
 //			else if(key == KeyEvent.VK_ESCAPE) {
 //				//quit the game
@@ -107,11 +107,11 @@ public class Board extends JPanel implements ActionListener {
 		for (int i = 0; i < NUM_BLOCKS; i++) {
 			for (int j = 0; j < NUM_BLOCKS; j++) {
 				if (grid[i][j] == -1) {
-					g2d.fillRoundRect(i * bSize, j * bSize, bSize, bSize, 1, 1);
+					g2d.fillRoundRect((i * bSize) + 10, (j * bSize) + 10, bSize, bSize, 1, 1);
 					;
 				} // draw wall
 				else if (grid[i][j] == 1) {
-					g2d.drawImage(pellet, i * bSize, j * bSize, this);
+					g2d.drawImage(pellet, (i * bSize) + 10, (j * bSize) + 10, this);
 				} // draw pellet
 			}
 		}
@@ -120,13 +120,13 @@ public class Board extends JPanel implements ActionListener {
 
 		g2d.setFont(smallFont);
 		g2d.setColor(Color.white);
-		g2d.drawString("Score: 0 ", 276, 355);
-		g2d.drawString("Lives Left: ", 10, 355);
+		g2d.drawString("Score: 0 ", 276, 380);
+		g2d.drawString("Lives Left: ", 10, 380);
 
 		g2d.setColor(Color.green);
 
 		for (short i = 0; i < livesLeft; i++) {
-			g2d.drawImage(livesIcon, i * 28 + 90, 340, this);
+			g2d.drawImage(livesIcon, i * 28 + 90, 365, this);
 		}
 
 		Toolkit.getDefaultToolkit().sync();

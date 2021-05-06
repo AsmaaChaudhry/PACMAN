@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 
 public class BlobAnimation extends JFrame {
     
-    private final int WINDOW_WIDTH = 390;
+    private final int WINDOW_WIDTH = 380;
     private final int WINDOW_HEIGHT = 420;
     private Board myBoard = new Board(WINDOW_WIDTH,WINDOW_HEIGHT);
     

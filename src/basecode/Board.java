@@ -20,7 +20,7 @@ public class Board extends JPanel implements ActionListener {
 
 	private Dimension d;
 	private int livesLeft;
-	private int posX, posY; // put in PacMan class
+	private int posX, posY, nextPosX, nextPosY; // put in PacMan class
 
 	private Timer t;
 
@@ -29,12 +29,15 @@ public class Board extends JPanel implements ActionListener {
 	private Image pellet = new ImageIcon("src/images/Pellet.png").getImage();
 	//make a test ghost
 	private Ghost testGhost = new Ghost("src/images/whiteGhost.gif", 100, 100);
-	private int bSize;
+	private int bSize, movement;
+	private int gridC, gridR;
 	private final int NUM_BLOCKS = 15;
 	private final int MAX_GHOSTS = 13;
 
-	private int[][] grid = { { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, 1, 1, 1 },
+	private int[][] grid = { 
+			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, 
+			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, 1, 1, 1 },
 			{ 1, 1, 1, -1, -1, -1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, { 1, 1, 1, -1, -1, -1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
 			{ 1, 1, 1, -1, -1, -1, 1, 1, 1, -1, -1, -1, -1, 1, 1 }, { 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, -1, -1, -1, 1, 1 },
 			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, -1, -1, -1, 1, 1 }, { 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, -1, -1, -1, 1, 1 },
@@ -57,6 +60,17 @@ public class Board extends JPanel implements ActionListener {
 		t.start();
 
 		bSize = Math.min(360 / 15, 360 / 15);
+		movement = bSize/4;
+		gridC = posX/bSize;
+		gridR = posY/bSize;
+	}
+	
+	private boolean checkGridMove(int x, int y, int[][] grid) {
+		
+		int column = x/bSize;
+		int row = y/bSize;
+		if(grid[column][row] == -1) { return false; }
+		return true;
 	}
 
 	class Keyboard extends KeyAdapter {
@@ -67,18 +81,38 @@ public class Board extends JPanel implements ActionListener {
 			int key = e.getKeyCode();
 
 			if (key == KeyEvent.VK_LEFT && posX > 10) {
-				posX = posX - 6;
-				// is posX allowed/is this a maze block?
+				nextPosX = posX - movement - 12;
+				if(checkGridMove(nextPosX, posY, grid)) {
+					grid[gridC][gridR] -= 2;
+					posX -= movement;
+					grid[gridC][gridR] += 2;
+				}
 				// is pellet eaten?
 				pacMan = new ImageIcon("src/images/PacManLeft.gif").getImage();
 			} else if (key == KeyEvent.VK_RIGHT && posX < d.width - 35) {
-				posX = posX + 6;
+				nextPosX = posX + movement + 11;
+				if(checkGridMove(nextPosX, posY, grid)) {
+					grid[gridC][gridR] -= 2;
+					posX += movement;
+					grid[gridC][gridR] += 2;
+				}
+				
 				pacMan = new ImageIcon("src/images/PacManRight.gif").getImage();
 			} else if (key == KeyEvent.VK_UP && posY > 10) {
-				posY = posY - 6;
+				nextPosY = posY - movement - 12;
+				if(checkGridMove(posX, nextPosY, grid)) {
+					grid[gridC][gridR] -= 2;
+					posY -= movement;
+					grid[gridC][gridR] += 2;
+				}
 				pacMan = new ImageIcon("src/images/PacManUp.gif").getImage();
 			} else if (key == KeyEvent.VK_DOWN && posY < d.height - 75) {
-				posY = posY + 6;
+				nextPosY = posY + movement + 10;
+				if(checkGridMove(posX, nextPosY, grid)) {
+					grid[gridC][gridR] -= 2;
+					posY += movement;
+					grid[gridC][gridR] += 2;
+				}
 				pacMan = new ImageIcon("src/images/PacManDown.gif").getImage();
 //			else if(key == KeyEvent.VK_ESCAPE) {
 //				//quit the game

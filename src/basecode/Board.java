@@ -27,6 +27,8 @@ public class Board extends JPanel implements ActionListener {
 	private Image pacMan = new ImageIcon("src/images/PacManRight.gif").getImage();
 	private Image livesIcon = new ImageIcon("src/images/PacManResting.png").getImage();
 	private Image pellet = new ImageIcon("src/images/Pellet.png").getImage();
+	//make a test ghost
+	private Ghost testGhost = new Ghost("src/images/whiteGhost.gif", 100, 100);
 	private int bSize;
 	private final int NUM_BLOCKS = 15;
 	private final int MAX_GHOSTS = 13;
@@ -117,6 +119,8 @@ public class Board extends JPanel implements ActionListener {
 		}
 
 		g2d.drawImage(pacMan, posX, posY, this);
+		//draw the test ghost
+		g2d.drawImage(testGhost.getIcon(), testGhost.getGhostX(), testGhost.getGhostY(), this);
 
 		g2d.setFont(smallFont);
 		g2d.setColor(Color.white);
@@ -136,6 +140,7 @@ public class Board extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// update ghost position
+	    testGhost.move();
 		repaint();
 	}
 }

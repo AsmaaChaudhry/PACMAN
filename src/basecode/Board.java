@@ -257,5 +257,4 @@ public class Board extends JPanel implements ActionListener {
 	    testGhost.move(counter);
 	    counter ++;
 		repaint();
-    }
 }

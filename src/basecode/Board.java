@@ -18,6 +18,7 @@ import javax.swing.Timer;
 
 public class Board extends JPanel implements ActionListener {
 
+
     private Dimension d;
     private int livesLeft, score;
     private int posX, posY, nextPosX, nextPosY; // put in PacMan class
@@ -34,6 +35,7 @@ public class Board extends JPanel implements ActionListener {
     private int gridC, gridR;
     private final int NUM_BLOCKS = 15;
     private final int MAX_GHOSTS = 13;
+    public int counter = 0;
 
     private int[][] grid = { 
             { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
@@ -247,9 +249,13 @@ public class Board extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        // update ghost position
-        testGhost.move();
-        
-        repaint();
+       //make sure that the counter does not overload
+	    if (counter>500) {
+	        counter = 0;
+	    }
+	 // update ghost position
+	    testGhost.move(counter);
+	    counter ++;
+		repaint();
     }
 }

@@ -49,8 +49,10 @@ public class Ghost {
     /**
      * Moves the ghost autonomously at random
      */
-    public void move() {
-        setGhostDir();
+    public void move(int counter) {
+        if(counter%5 == 0) {
+            setGhostDir(); 
+        }
         if (ghostDir == 1) {
             //move right
             ghostX+=this.speed;

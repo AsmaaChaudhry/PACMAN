@@ -28,10 +28,11 @@ public class Board extends JPanel implements ActionListener {
 	private Image livesIcon = new ImageIcon("src/images/PacManResting.png").getImage();
 	private Image pellet = new ImageIcon("src/images/Pellet.png").getImage();
 	//make a test ghost
-	private Ghost testGhost = new Ghost("src/images/whiteGhost.gif", 100, 100);
+	private Ghost testGhost = new Ghost("src/images/whiteGhost.gif", 50, 150);
 	private int bSize;
 	private final int NUM_BLOCKS = 15;
 	private final int MAX_GHOSTS = 13;
+	public int counter = 0;
 
 	private int[][] grid = { { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
 			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, 1, 1, 1 },
@@ -139,8 +140,13 @@ public class Board extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// update ghost position
-	    testGhost.move();
+		//make sure that the counter does not overload
+	    if (counter>500) {
+	        counter = 0;
+	    }
+	 // update ghost position
+	    testGhost.move(counter);
+	    counter ++;
 		repaint();
 	}
 }

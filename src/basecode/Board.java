@@ -263,7 +263,14 @@ public class Board extends JPanel implements ActionListener {
 
 		
 		if (checkCollision(posX,posY, Ghost.getGhostX(), Ghost.getGhostY()) == true){
-		    System.out.println("C");
+		    livesLeft--;
+            if (livesLeft == 0) {
+                System.exit(0);
+            }
+            posX = 10;
+            posY = 10;
+            testGhost = new Ghost("src/images/whiteGhost.gif", 50, 150, 5);
+
 		}
     }
     
@@ -282,5 +289,4 @@ public class Board extends JPanel implements ActionListener {
         return false;
     }
 
-}
 }

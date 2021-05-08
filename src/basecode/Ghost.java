@@ -5,7 +5,8 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 
 public class Ghost {
-    public int ghostX, ghostY;
+    public static int ghostX;
+    public static int ghostY;
     public String imagePath;
     public int speed = 2;
     private int ghostDir;
@@ -23,12 +24,12 @@ public class Ghost {
         this.imagePath = imagePath;
         this.speed = speed;
     }
-    public int getGhostX() {
-        return this.ghostX;
+    public static int getGhostX() {
+        return ghostX;
         }
         
-    public int getGhostY() {
-        return this.ghostY;
+    public static int getGhostY() {
+        return ghostY;
     }
     /**
      * Make a new image Icon for a ghost
@@ -47,24 +48,61 @@ public class Ghost {
         return ghostDir;
     }
     /**
+     * Checks to make sure that a move is valid for the ghost, obstacle avoidance
+     * @param x - int x position for move in pixels
+     * @param y - int y position for move in pixels
+     * @param grid - a grid that contains valid and invalid positions
+     * @return true if move is valid
+     */
+    private boolean checkValid(int x, int y, int[][] grid) {
+        //find the size in grid
+        int bSize = Math.min(360 / 15, 360 / 15);
+        int i = x/bSize;
+        int j = y/bSize;
+        int i2 = (x+22)/bSize;
+        int j2 = (y+22)/bSize;
+        try {
+            if(grid[i][j]!= -1 && grid[i2][j]!= -1 && grid[i][j2]!= -1 && grid[i2][j2]!= -1) {
+                return true;
+            }
+        }catch(ArrayIndexOutOfBoundsException e) {
+            return false;
+        }
+        
+        return false;
+    }
+    /**
      * Moves the ghost autonomously at random
      */
     public void move(int counter) {
         if(counter%5 == 0) {
             setGhostDir(); 
         }
+        int newPos = 0;
         if (ghostDir == 1) {
             //move right
-            ghostX+=this.speed;
+            newPos = ghostX + this.speed;
+            if(checkValid(newPos, this.ghostY, Board.getGrid()) == true) {
+                ghostX+=this.speed;
+            }
         }else if (ghostDir ==2) {
             //move down 
-            ghostY+=this.speed;
+            newPos = ghostY + this.speed;
+            if(checkValid(this.ghostX, newPos, Board.getGrid())== true) {
+                ghostY+=this.speed;
+            }
         }else if (ghostDir == 3) {
             //move left 
-            ghostX-=this.speed;
+            newPos = ghostX - this.speed;
+            if(checkValid(newPos, this.ghostY, Board.getGrid())== true) {
+                ghostX-=this.speed;
+            }          
         }else if (ghostDir == 4) {
             //move up
-            ghostY -=this.speed;
+            newPos = ghostY - this.speed;
+            if(checkValid(this.ghostX, newPos, Board.getGrid())== true) {
+                ghostY-=this.speed;
+            }
         }
     }
 }

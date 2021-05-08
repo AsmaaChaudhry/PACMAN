@@ -69,6 +69,23 @@ public class Board extends JPanel implements ActionListener {
             { true, true, true, true, true, true, true, true, true, true, true, false, true, true, true }, 
             { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true },
             {true, true, true, true, true, true, true, true, true, true, true, true, true, true, true } };
+    
+    private final boolean[][] GRID3 = { 
+            { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true },
+            { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true }, 
+            { true, true, true, true, true, true, true, true, true, true, true, false, true, true, true},
+            { true, true, true, false, false,false, true, true, true, true, true, true, true, true, true },
+            { true, true, true, false, false,false, true, true, true, true, true, true, true, true, true  },
+            { true, true, true, false, false, false,  true, true, true, false, false, false,  false, true, true }, 
+            { true, true, true, true, true, true, true, true, true, false, false, false,  false, true, true },
+            { true,true,true, true, true, true, true, true, true, false, false, false, false, true, true }, 
+            { true,true,true, true, true, true, true, true, true, false, false, false, false, true, true },
+            { true, true, true, false, false, false, true, true, true, false, false, false, false, true, true },
+            { true, true, true, false, false, false, true, true, true, false, false, false, false, true, true }, 
+            { true, true, true, false, false, false, true, true, true, true, true, true, true, true, true },
+            { true, true, true, true, true, true, true, true, true, true, true, false, true, true, true }, 
+            { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true },
+            {true, true, true, true, true, true, true, true, true, true, true, true, true, true, true } };
 
     public Board(int w, int h) {
 
@@ -195,6 +212,15 @@ public class Board extends JPanel implements ActionListener {
         }
 
     }
+    
+    public void initLevel() {
+    	for (int i = 0; i < NUM_BLOCKS; i ++) {
+    		for (int j = 0; j < NUM_BLOCKS; j ++) {
+    			grid2[i][j] = GRID3[i][j];
+    		}
+    	}
+    	repaint();
+    }
 
     @Override
     public void paintComponent(Graphics g) {
@@ -205,6 +231,14 @@ public class Board extends JPanel implements ActionListener {
 
         g2d.setColor(Color.black);
         g2d.fillRect(0, 0, d.width, d.height);
+        
+        if (score > 1 && score % 181 == 0) {
+        	initLevel();
+        	System.out.println("I am here!");
+        	if (GRID3[0][0] == false) {
+        		System.out.println("oh no!");
+        	}
+        }
 
         // draw grid
         g2d.setColor(Color.green);
@@ -215,7 +249,7 @@ public class Board extends JPanel implements ActionListener {
                     g2d.drawImage(pellet, (i * bSize) + 10, (j * bSize) + 10, this);
                 } // draw pellet
                 else if (grid2[i][j] == false){
-                    g2d.drawImage(removedPellet, i * bSize, j * bSize, this);
+                    g2d.drawImage(removedPellet, (i * bSize) + 10, (j * bSize) + 10, this);
                   }// removes pellet
  
             }
@@ -282,5 +316,4 @@ public class Board extends JPanel implements ActionListener {
         return false;
     }
 
-}
 }

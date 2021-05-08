@@ -181,9 +181,9 @@ public class Board extends JPanel implements ActionListener {
                 }
                 pacMan = new ImageIcon("src/images/PacManDown.gif").getImage();
                 
-                
-//          else if(key == KeyEvent.VK_ESCAPE) {
-//              //quit the game
+            } 
+         else if(key == KeyEvent.VK_ESCAPE) {
+             System.exit(0);
 //          }
 //          else if(key == KeyEvent.VK_SPACE) {
 //              //pause game
@@ -220,7 +220,7 @@ public class Board extends JPanel implements ActionListener {
  
             }
         }
-        
+        grid[0][0] = 1;// Remove the first block at the start
         for (int i = 0; i < NUM_BLOCKS; i++) {
             for (int j = 0; j < NUM_BLOCKS; j++) {
               
@@ -260,6 +260,7 @@ public class Board extends JPanel implements ActionListener {
 	    testGhost.move(counter);
 	    counter ++;
 		repaint();
+
 		
 		if (checkCollision(posX,posY, Ghost.getGhostX(), Ghost.getGhostY()) == true){
 		    System.out.println("C");
@@ -280,4 +281,6 @@ public class Board extends JPanel implements ActionListener {
         }
         return false;
     }
+
+}
 }

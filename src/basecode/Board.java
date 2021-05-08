@@ -30,14 +30,14 @@ public class Board extends JPanel implements ActionListener {
     private Image pellet = new ImageIcon("src/images/Pellet.png").getImage();
     private Image removedPellet = new ImageIcon("src/images/removedPellet.png").getImage();
     //make a test ghost
-    private Ghost testGhost = new Ghost("src/images/whiteGhost.gif", 100, 100);
+    private Ghost testGhost = new Ghost("src/images/whiteGhost.gif", 50, 150, 5);
     private int bSize, movement;
     private int gridC, gridR;
     private final int NUM_BLOCKS = 15;
     private final int MAX_GHOSTS = 13;
     public int counter = 0;
 
-    private int[][] grid = { 
+    private static int[][] grid = { 
             { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
             { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, 
             { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, 1, 1, 1 },
@@ -87,6 +87,9 @@ public class Board extends JPanel implements ActionListener {
         movement = bSize/4;
         gridC = posX/bSize;
         gridR = posY/bSize;
+    }
+    public static int[][] getGrid(){
+        return grid;
     }
     
     private boolean checkGridMove(int x, int y, int[][] grid) {
@@ -178,9 +181,9 @@ public class Board extends JPanel implements ActionListener {
                 }
                 pacMan = new ImageIcon("src/images/PacManDown.gif").getImage();
                 
-                
-//          else if(key == KeyEvent.VK_ESCAPE) {
-//              //quit the game
+            } 
+         else if(key == KeyEvent.VK_ESCAPE) {
+             System.exit(0);
 //          }
 //          else if(key == KeyEvent.VK_SPACE) {
 //              //pause game
@@ -217,7 +220,7 @@ public class Board extends JPanel implements ActionListener {
  
             }
         }
-        
+        grid[0][0] = 1;// Remove the first block at the start
         for (int i = 0; i < NUM_BLOCKS; i++) {
             for (int j = 0; j < NUM_BLOCKS; j++) {
               
@@ -257,4 +260,27 @@ public class Board extends JPanel implements ActionListener {
 	    testGhost.move(counter);
 	    counter ++;
 		repaint();
+
+		
+		if (checkCollision(posX,posY, Ghost.getGhostX(), Ghost.getGhostY()) == true){
+		    System.out.println("C");
+		}
+    }
+    
+    private boolean checkCollision(int pManX, int pManY, int ghostX, int ghostY) {
+        int pCX = (pManX + pManX + (pManX +22) + (pManX+22))/4;
+        int pCY = (pManY + pManY + (pManY - 22) + (pManY-22))/4;
+        int gCX = (ghostX + ghostX + (ghostX +22) + (ghostX+22))/4;
+        int gCY = (ghostY + ghostY + (ghostY - 22) + (ghostY-22))/4;
+        int squared = ((pCX-gCX)*(pCX-gCX)) + ((pCY-gCY)*(pCY-gCY));
+        double distance = Math.sqrt(squared);
+//        System.out.println(distance);
+        if (distance <20.0) {
+            System.out.println("Collision");
+            return true;
+        }
+        return false;
+    }
+
+}
 }

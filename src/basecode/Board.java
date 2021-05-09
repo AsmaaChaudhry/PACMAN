@@ -213,26 +213,20 @@ public class Board extends JPanel implements ActionListener {
          else if(key == KeyEvent.VK_ESCAPE) {             
              System.exit(0);
 
-//          }
-//          else if(key == KeyEvent.VK_SPACE) {
-//              //pause game
-//              //stop timer
-//              //pop up window saying game is paused??
-//          }
-            }
-         else if(key == KeyEvent.VK_S) {
-             inGame = true; 
-             startGame();
-         }
-
           }
-          else if(key == KeyEvent.VK_SPACE) {
+            
+         else if(key == KeyEvent.VK_SPACE) {
               //pause game
               testGhost.pause();
               blueGhost.pause();
               //stop timer
               //pop up window saying game is paused??
           }
+            
+         else if(key == KeyEvent.VK_S) {
+             inGame = true; 
+             startGame();
+         }
            
             repaint();
         }

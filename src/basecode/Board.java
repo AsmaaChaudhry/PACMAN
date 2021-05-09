@@ -18,309 +18,316 @@ import javax.swing.Timer;
 
 public class Board extends JPanel implements ActionListener {
 
+	private Dimension d;
+	private int livesLeft, score;
+	private int posX, posY, nextPosX, nextPosY; // put in PacMan class
 
-    private Dimension d;
-    private int livesLeft, score;
-    private int posX, posY, nextPosX, nextPosY; // put in PacMan class
+	private Timer t;
 
-    private Timer t;
+	private Image pacMan = new ImageIcon("src/images/PacManRight.gif").getImage();
+	private Image livesIcon = new ImageIcon("src/images/PacManResting.png").getImage();
+	private Image pellet = new ImageIcon("src/images/Pellet.png").getImage();
+	private Image removedPellet = new ImageIcon("src/images/removedPellet.png").getImage();
+	// make a test ghost
+	private Ghost testGhost = new Ghost("src/images/whiteGhost.gif", 50, 150, 5);
+	private Ghost testGhost2 = new Ghost("src/images/blueGhost1.gif", 60, 160, 6);
+	private int bSize, movement;
+	private int gridC, gridR;
+	private final int NUM_BLOCKS = 15;
+	private final int MAX_GHOSTS = 12;
+	public int counter = 0;
 
-    private Image pacMan = new ImageIcon("src/images/PacManRight.gif").getImage();
-    private Image livesIcon = new ImageIcon("src/images/PacManResting.png").getImage();
-    private Image pellet = new ImageIcon("src/images/Pellet.png").getImage();
-    private Image removedPellet = new ImageIcon("src/images/removedPellet.png").getImage();
-    //make a test ghost
-    private Ghost testGhost = new Ghost("src/images/whiteGhost.gif", 50, 150, 5);
-    private int bSize, movement;
-    private int gridC, gridR;
-    private final int NUM_BLOCKS = 15;
-    private final int MAX_GHOSTS = 13;
-    public int counter = 0;
+	private static int[][] grid = { { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, 1, 1, 1 },
+			{ 1, 1, 1, -1, -1, -1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, { 1, 1, 1, -1, -1, -1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+			{ 1, 1, 1, -1, -1, -1, 1, 1, 1, -1, -1, -1, -1, 1, 1 }, { 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, -1, -1, -1, 1, 1 },
+			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, -1, -1, -1, 1, 1 }, { 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, -1, -1, -1, 1, 1 },
+			{ 1, 1, 1, -1, -1, -1, 1, 1, 1, -1, -1, -1, -1, 1, 1 },
+			{ 1, 1, 1, -1, -1, -1, 1, 1, 1, -1, -1, -1, -1, 1, 1 }, { 1, 1, 1, -1, -1, -1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, 1, 1, 1 }, { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 } };
 
-    private static int[][] grid = { 
-            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, 
-            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, 1, 1, 1 },
-            { 1, 1, 1, -1, -1, -1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, 
-            { 1, 1, 1, -1, -1, -1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-            { 1, 1, 1, -1, -1, -1, 1, 1, 1, -1, -1, -1, -1, 1, 1 }, 
-            { 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, -1, -1, -1, 1, 1 },
-            { 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, -1, -1, -1, 1, 1 }, 
-            { 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, -1, -1, -1, 1, 1 },
-            { 1, 1, 1, -1, -1, -1, 1, 1, 1, -1, -1, -1, -1, 1, 1 },
-            { 1, 1, 1, -1, -1, -1, 1, 1, 1, -1, -1, -1, -1, 1, 1 }, 
-            { 1, 1, 1, -1, -1, -1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, 1, 1, 1 }, 
-            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 } };
-    private boolean[][] grid2 = { 
-            { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true },
-            { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true }, 
-            { true, true, true, true, true, true, true, true, true, true, true, false, true, true, true},
-            { true, true, true, false, false,false, true, true, true, true, true, true, true, true, true },
-            { true, true, true, false, false,false, true, true, true, true, true, true, true, true, true  },
-            { true, true, true, false, false, false,  true, true, true, false, false, false,  false, true, true }, 
-            { true, true, true, true, true, true, true, true, true, false, false, false,  false, true, true },
-            { true,true,true, true, true, true, true, true, true, false, false, false, false, true, true }, 
-            { true,true,true, true, true, true, true, true, true, false, false, false, false, true, true },
-            { true, true, true, false, false, false, true, true, true, false, false, false, false, true, true },
-            { true, true, true, false, false, false, true, true, true, false, false, false, false, true, true }, 
-            { true, true, true, false, false, false, true, true, true, true, true, true, true, true, true },
-            { true, true, true, true, true, true, true, true, true, true, true, false, true, true, true }, 
-            { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true },
-            {true, true, true, true, true, true, true, true, true, true, true, true, true, true, true } };
-    
-    private final boolean[][] GRID3 = { 
-            { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true },
-            { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true }, 
-            { true, true, true, true, true, true, true, true, true, true, true, false, true, true, true},
-            { true, true, true, false, false,false, true, true, true, true, true, true, true, true, true },
-            { true, true, true, false, false,false, true, true, true, true, true, true, true, true, true  },
-            { true, true, true, false, false, false,  true, true, true, false, false, false,  false, true, true }, 
-            { true, true, true, true, true, true, true, true, true, false, false, false,  false, true, true },
-            { true,true,true, true, true, true, true, true, true, false, false, false, false, true, true }, 
-            { true,true,true, true, true, true, true, true, true, false, false, false, false, true, true },
-            { true, true, true, false, false, false, true, true, true, false, false, false, false, true, true },
-            { true, true, true, false, false, false, true, true, true, false, false, false, false, true, true }, 
-            { true, true, true, false, false, false, true, true, true, true, true, true, true, true, true },
-            { true, true, true, true, true, true, true, true, true, true, true, false, true, true, true }, 
-            { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true },
-            {true, true, true, true, true, true, true, true, true, true, true, true, true, true, true } };
+	private boolean[][] grid2 = {
+			{ true, true, true, true, true, true, true, true, true, true, true, true, true, true, true },
+			{ true, true, true, true, true, true, true, true, true, true, true, true, true, true, true },
+			{ true, true, true, true, true, true, true, true, true, true, true, false, true, true, true },
+			{ true, true, true, false, false, false, true, true, true, true, true, true, true, true, true },
+			{ true, true, true, false, false, false, true, true, true, true, true, true, true, true, true },
+			{ true, true, true, false, false, false, true, true, true, false, false, false, false, true, true },
+			{ true, true, true, true, true, true, true, true, true, false, false, false, false, true, true },
+			{ true, true, true, true, true, true, true, true, true, false, false, false, false, true, true },
+			{ true, true, true, true, true, true, true, true, true, false, false, false, false, true, true },
+			{ true, true, true, false, false, false, true, true, true, false, false, false, false, true, true },
+			{ true, true, true, false, false, false, true, true, true, false, false, false, false, true, true },
+			{ true, true, true, false, false, false, true, true, true, true, true, true, true, true, true },
+			{ true, true, true, true, true, true, true, true, true, true, true, false, true, true, true },
+			{ true, true, true, true, true, true, true, true, true, true, true, true, true, true, true },
+			{ true, true, true, true, true, true, true, true, true, true, true, true, true, true, true } };
 
-    public Board(int w, int h) {
+	private final boolean[][] GRID3 = {
+			{ true, true, true, true, true, true, true, true, true, true, true, true, true, true, true },
+			{ true, true, true, true, true, true, true, true, true, true, true, true, true, true, true },
+			{ true, true, true, true, true, true, true, true, true, true, true, false, true, true, true },
+			{ true, true, true, false, false, false, true, true, true, true, true, true, true, true, true },
+			{ true, true, true, false, false, false, true, true, true, true, true, true, true, true, true },
+			{ true, true, true, false, false, false, true, true, true, false, false, false, false, true, true },
+			{ true, true, true, true, true, true, true, true, true, false, false, false, false, true, true },
+			{ true, true, true, true, true, true, true, true, true, false, false, false, false, true, true },
+			{ true, true, true, true, true, true, true, true, true, false, false, false, false, true, true },
+			{ true, true, true, false, false, false, true, true, true, false, false, false, false, true, true },
+			{ true, true, true, false, false, false, true, true, true, false, false, false, false, true, true },
+			{ true, true, true, false, false, false, true, true, true, true, true, true, true, true, true },
+			{ true, true, true, true, true, true, true, true, true, true, true, false, true, true, true },
+			{ true, true, true, true, true, true, true, true, true, true, true, true, true, true, true },
+			{ true, true, true, true, true, true, true, true, true, true, true, true, true, true, true } };
 
-        d = new Dimension(w, h);
-        livesLeft = 3;
-        posX = 10;
-        posY = 10;
+	public Board(int w, int h) {
 
-        addKeyListener(new Keyboard());
-        setFocusable(true);
-        setBackground(Color.white);
-        t = new Timer(40, this);
-        t.start();
+		d = new Dimension(w, h);
+		livesLeft = 3;
+		posX = 10;
+		posY = 10;
 
-        bSize = Math.min(360 / 15, 360 / 15);
-        movement = bSize/4;
-        gridC = posX/bSize;
-        gridR = posY/bSize;
-    }
-    public static int[][] getGrid(){
-        return grid;
-    }
-    
-    private boolean checkGridMove(int x, int y, int[][] grid) {
-        
-        int column = x/bSize;
-        int row = y/bSize;
-        if(grid[column][row] == -1) { return false; }
-        return true;
-    }
+		addKeyListener(new Keyboard());
+		setFocusable(true);
+		setBackground(Color.white);
+		t = new Timer(40, this);
+		t.start();
 
-    class Keyboard extends KeyAdapter {
+		bSize = Math.min(360 / 15, 360 / 15);
+		movement = bSize / 4;
+		gridC = posX / bSize;
+		gridR = posY / bSize;
+	}
 
-        @Override
-        public void keyPressed(KeyEvent e) {
+	public static int[][] getGrid() {
+		return grid;
+	}
 
-            int key = e.getKeyCode();
+	private boolean checkGridMove(int x, int y, int[][] grid) {
 
-            if (key == KeyEvent.VK_LEFT && posX > 10) {
-                nextPosX = posX - movement - 12;
-                if(checkGridMove(nextPosX, posY, grid)) {
-                    grid[gridC][gridR] -= 2;
-//                
-                    posX -= movement;
-                    gridC = posX/bSize;
-                    grid[gridC][gridR] += 2;
-                }
-                if ((checkGridMove(nextPosX, posY, grid))&& (grid2[gridC][gridR])){
-                    grid2[gridC][gridR] = false;        
-                    score++;
-                   
-                }
-                    
-                
-                // is pellet eaten?
-                pacMan = new ImageIcon("src/images/PacManLeft.gif").getImage();
-             
-              
-                
-            } else if (key == KeyEvent.VK_RIGHT && posX < d.width - 35) {
-                nextPosX = posX + movement + 11;
-                System.out.println(gridC);
-                System.out.println(gridR);
-                System.out.println(grid2[gridC][gridR]);
-                System.out.println(checkGridMove(nextPosX, posY, grid));
-                if(checkGridMove(nextPosX, posY, grid)) {
-                    grid[gridC][gridR] -= 2;
-                    posX += movement;
-                    gridC = posX/bSize;
-                    grid[gridC][gridR] += 2;
-                    
-                }
-                if ((checkGridMove(nextPosX, posY, grid))&& (grid2[gridC][gridR])){
-                    grid2[gridC][gridR] = false;        
-                    score++;
-                    System.out.println(gridC);
-                    System.out.println(gridR);
-                    System.out.println(grid2[gridC][gridR]);
-                    System.out.println(checkGridMove(nextPosX, posY, grid));
-                }
-                pacMan = new ImageIcon("src/images/PacManRight.gif").getImage();
-                
-            } else if (key == KeyEvent.VK_UP && posY > 10) {
-                nextPosY = posY - movement - 12;
-                if(checkGridMove(posX, nextPosY, grid)) {
-                    grid[gridC][gridR] -= 2;
-                    posY -= movement;
-                    gridR = posY/bSize;
-                    grid[gridC][gridR] += 2;
-                }
-                if ((checkGridMove(nextPosX, posY, grid))&& (grid2[gridC][gridR])){
-                    grid2[gridC][gridR] = false;        
-                    score++;
-                   
-                }
-                pacMan = new ImageIcon("src/images/PacManUp.gif").getImage();
-               
-            } else if (key == KeyEvent.VK_DOWN && posY < d.height - 75) {
-                nextPosY = posY + movement + 10;
-                if(checkGridMove(posX, nextPosY, grid)) {
-                    grid[gridC][gridR] -= 2;
-                    posY += movement;
-                    gridR = posY/bSize;
-                    grid[gridC][gridR] += 2;
-                }
-               if ((checkGridMove(nextPosX, posY, grid))&& (grid2[gridC][gridR])){
-                    grid2[gridC][gridR] = false;        
-                    score++;
-                   
-                }
-                pacMan = new ImageIcon("src/images/PacManDown.gif").getImage();
-                
-            } 
-         else if(key == KeyEvent.VK_ESCAPE) {
-             System.exit(0);
+		int column = x / bSize;
+		int row = y / bSize;
+		if (grid[column][row] == -1) {
+			return false;
+		}
+		return true;
+	}
+
+	class Keyboard extends KeyAdapter {
+
+		@Override
+		public void keyPressed(KeyEvent e) {
+
+			int key = e.getKeyCode();
+
+			if (key == KeyEvent.VK_LEFT && posX > 10) {
+				nextPosX = posX - movement - 12;
+				if (checkGridMove(nextPosX, posY, grid)) {
+					grid[gridC][gridR] -= 2;           
+					posX -= movement;
+					gridC = posX / bSize;
+					grid[gridC][gridR] += 2;
+				}
+				if ((checkGridMove(nextPosX, posY, grid)) && (grid2[gridC][gridR])) {
+					grid2[gridC][gridR] = false;
+					score++;
+				}
+				// is pellet eaten?
+				pacMan = new ImageIcon("src/images/PacManLeft.gif").getImage();
+
+			} else if (key == KeyEvent.VK_RIGHT && posX < d.width - 35) {
+				nextPosX = posX + movement + 11;
+				System.out.println(gridC);
+				System.out.println(gridR);
+				System.out.println(grid2[gridC][gridR]);
+				System.out.println(checkGridMove(nextPosX, posY, grid));
+
+				if (checkGridMove(nextPosX, posY, grid)) {
+					grid[gridC][gridR] -= 2;
+					posX += movement;
+					gridC = posX / bSize;
+					grid[gridC][gridR] += 2;
+
+				}
+				if ((checkGridMove(nextPosX, posY, grid)) && (grid2[gridC][gridR])) {
+					grid2[gridC][gridR] = false;
+					score++;
+					System.out.println(gridC);
+					System.out.println(gridR);
+					System.out.println(grid2[gridC][gridR]);
+					System.out.println(checkGridMove(nextPosX, posY, grid));
+				}
+
+				pacMan = new ImageIcon("src/images/PacManRight.gif").getImage();
+
+			} else if (key == KeyEvent.VK_UP && posY > 10) {
+				nextPosY = posY - movement - 12;
+
+				if (checkGridMove(posX, nextPosY, grid)) {
+					grid[gridC][gridR] -= 2;
+					posY -= movement;
+					gridR = posY / bSize;
+					grid[gridC][gridR] += 2;
+				}
+
+				if ((checkGridMove(nextPosX, posY, grid)) && (grid2[gridC][gridR])) {
+					grid2[gridC][gridR] = false;
+					score++;
+
+				}
+
+				pacMan = new ImageIcon("src/images/PacManUp.gif").getImage();
+
+			} else if (key == KeyEvent.VK_DOWN && posY < d.height - 75) {
+				nextPosY = posY + movement + 10;
+				
+				if (checkGridMove(posX, nextPosY, grid)) {
+					grid[gridC][gridR] -= 2;
+					posY += movement;
+					gridR = posY / bSize;
+					grid[gridC][gridR] += 2;
+				}
+				
+				if ((checkGridMove(nextPosX, posY, grid)) && (grid2[gridC][gridR])) {
+					grid2[gridC][gridR] = false;
+					score++;
+
+				}
+				
+				pacMan = new ImageIcon("src/images/PacManDown.gif").getImage();
+
+			} else if (key == KeyEvent.VK_ESCAPE) {
+				System.exit(0);
 //          }
 //          else if(key == KeyEvent.VK_SPACE) {
 //              //pause game
 //              //stop timer
 //              //pop up window saying game is paused??
 //          }
-            }
-            repaint();
-        }
+			}
+			repaint();
+		}
 
-    }
-    
-    public void initLevel() {
-    	for (int i = 0; i < NUM_BLOCKS; i ++) {
-    		for (int j = 0; j < NUM_BLOCKS; j ++) {
-    			grid2[i][j] = GRID3[i][j];
-    		}
-    	}
-    	repaint();
-    }
+	}
 
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
+	public void initLevel() {
+		for (int i = 0; i < NUM_BLOCKS; i++) {
+			for (int j = 0; j < NUM_BLOCKS; j++) {
+				grid2[i][j] = GRID3[i][j];
+			}
+		}
+		posX = 10;
+		posY = 10;
+		gridC = posX/bSize;
+		gridR = posY/bSize;
+		testGhost = new Ghost("src/images/whiteGhost.gif", 50, 150, 5);
+		repaint();
+	}
 
-        Font smallFont = new Font("Helvetica", Font.BOLD, 14);
-        Graphics2D g2d = (Graphics2D) g;
+	@Override
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
 
-        g2d.setColor(Color.black);
-        g2d.fillRect(0, 0, d.width, d.height);
-        
-        if (score > 1 && score % 181 == 0) {
-        	initLevel();
-        	System.out.println("I am here!");
-        	if (GRID3[0][0] == false) {
-        		System.out.println("oh no!");
-        	}
-        }
+		Font smallFont = new Font("Helvetica", Font.BOLD, 14);
+		Graphics2D g2d = (Graphics2D) g;
 
-        // draw grid
-        g2d.setColor(Color.green);
-        for (int i = 0; i < NUM_BLOCKS; i++) {
-            for (int j = 0; j < NUM_BLOCKS; j++) {
-                
-                if (grid2[i][j] == true) {
-                    g2d.drawImage(pellet, (i * bSize) + 10, (j * bSize) + 10, this);
-                } // draw pellet
-                else if (grid2[i][j] == false){
-                    g2d.drawImage(removedPellet, (i * bSize) + 10, (j * bSize) + 10, this);
-                  }// removes pellet
- 
-            }
-        }
-        grid[0][0] = 1;// Remove the first block at the start
-        for (int i = 0; i < NUM_BLOCKS; i++) {
-            for (int j = 0; j < NUM_BLOCKS; j++) {
-              
-                if (grid[i][j] == -1) {
-                    g2d.fillRoundRect((i * bSize) + 10, (j * bSize) + 10, bSize, bSize, 1, 1);
-                    
-                } // draw wall
-            }
-        }
+		g2d.setColor(Color.black);
+		g2d.fillRect(0, 0, d.width, d.height);
 
-        g2d.drawImage(pacMan, posX, posY, this);
-        //draw the test ghost
-        g2d.drawImage(testGhost.getIcon(), testGhost.getGhostX(), testGhost.getGhostY(), this);
+		if (score > 1 && score % 181 == 0) {
+			if (score == 1991) {
+				System.out.println("you win!");
+				System.exit(0);
+			}
+			initLevel();
+		}
 
-        g2d.setFont(smallFont);
-        g2d.setColor(Color.white);
-        g2d.drawString("Score: " + String.valueOf(score)  , 276, 380);
-        g2d.drawString("Lives Left: ", 10, 380);
+		// draw grid
+		g2d.setColor(Color.green);
+		for (int i = 0; i < NUM_BLOCKS; i++) {
+			for (int j = 0; j < NUM_BLOCKS; j++) {
 
-        g2d.setColor(Color.green);
+				if (grid2[i][j] == true) {
+					g2d.drawImage(pellet, (i * bSize) + 10, (j * bSize) + 10, this);
+				} // draw pellet
+				else if (grid2[i][j] == false) {
+					g2d.drawImage(removedPellet, (i * bSize) + 10, (j * bSize) + 10, this);
+				} // removes pellet
 
-        for (short i = 0; i < livesLeft; i++) {
-            g2d.drawImage(livesIcon, i * 28 + 90, 365, this);
-        }
+			}
+		}
+		grid[0][0] = 1;// Remove the first block at the start
+		for (int i = 0; i < NUM_BLOCKS; i++) {
+			for (int j = 0; j < NUM_BLOCKS; j++) {
 
-        Toolkit.getDefaultToolkit().sync();
-        g2d.dispose();
-    }
+				if (grid[i][j] == -1) {
+					g2d.fillRoundRect((i * bSize) + 10, (j * bSize) + 10, bSize, bSize, 1, 1);
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-       //make sure that the counter does not overload
-	    if (counter>500) {
-	        counter = 0;
-	    }
-	 // update ghost position
-	    testGhost.move(counter);
-	    counter ++;
+				} // draw wall
+			}
+		}
+
+		g2d.drawImage(pacMan, posX, posY, this);
+		// draw the test ghost
+		g2d.drawImage(testGhost.getIcon(), testGhost.getGhostX(), testGhost.getGhostY(), this);
+		g2d.drawImage(testGhost2.getIcon(), testGhost2.getGhostX(), testGhost2.getGhostY(), this);
+
+		g2d.setFont(smallFont);
+		g2d.setColor(Color.white);
+		g2d.drawString("Score: " + String.valueOf(score), 276, 380);
+		g2d.drawString("Lives Left: ", 10, 380);
+
+		g2d.setColor(Color.green);
+
+		for (short i = 0; i < livesLeft; i++) {
+			g2d.drawImage(livesIcon, i * 28 + 90, 365, this);
+		}
+
+		Toolkit.getDefaultToolkit().sync();
+		g2d.dispose();
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// make sure that the counter does not overload
+		if (counter > 500) {
+			counter = 0;
+		}
+		// update ghost position
+		testGhost.move(counter);
+		testGhost2.move(counter);
+		counter++;
 		repaint();
 
-		
-		if (checkCollision(posX,posY, Ghost.getGhostX(), Ghost.getGhostY()) == true){
+		if (checkCollision(posX, posY, Ghost.getGhostX(), Ghost.getGhostY()) == true) {
 			livesLeft--;
-            if (livesLeft == 0) {
-                System.exit(0);
-            }
-            posX = 10;
-            posY = 10;
-            testGhost = new Ghost("src/images/whiteGhost.gif", 50, 150, 5);
+			if (livesLeft == 0) {
+				System.exit(0);
+			}
+			posX = 10;
+			posY = 10;
+			gridC = posX/bSize;
+			gridR = posY/bSize;
+			testGhost = new Ghost("src/images/whiteGhost.gif", 50, 150, 5);
+			testGhost2 = new Ghost("src/images/blueGhost1.gif", 60, 160, 6);
 
 		}
-    }
-    
-    private boolean checkCollision(int pManX, int pManY, int ghostX, int ghostY) {
-        int pCX = (pManX + pManX + (pManX +22) + (pManX+22))/4;
-        int pCY = (pManY + pManY + (pManY - 22) + (pManY-22))/4;
-        int gCX = (ghostX + ghostX + (ghostX +22) + (ghostX+22))/4;
-        int gCY = (ghostY + ghostY + (ghostY - 22) + (ghostY-22))/4;
-        int squared = ((pCX-gCX)*(pCX-gCX)) + ((pCY-gCY)*(pCY-gCY));
-        double distance = Math.sqrt(squared);
+	}
+
+	private boolean checkCollision(int pManX, int pManY, int ghostX, int ghostY) {
+		int pCX = (pManX + pManX + (pManX + 22) + (pManX + 22)) / 4;
+		int pCY = (pManY + pManY + (pManY - 22) + (pManY - 22)) / 4;
+		int gCX = (ghostX + ghostX + (ghostX + 22) + (ghostX + 22)) / 4;
+		int gCY = (ghostY + ghostY + (ghostY - 22) + (ghostY - 22)) / 4;
+		int squared = ((pCX - gCX) * (pCX - gCX)) + ((pCY - gCY) * (pCY - gCY));
+		double distance = Math.sqrt(squared);
 //        System.out.println(distance);
-        if (distance <20.0) {
-            System.out.println("Collision");
-            return true;
-        }
-        return false;
-    }
+		if (distance < 20.0) {
+			System.out.println("Collision");
+			return true;
+		}
+		return false;
+	}
 
 }

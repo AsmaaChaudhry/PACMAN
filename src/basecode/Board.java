@@ -100,7 +100,9 @@ public class Board extends JPanel implements ActionListener {
         setFocusable(true);
         setBackground(Color.white);
         t = new Timer(40, this);
-        t.start();
+//        t.start();
+        
+        
 
         bSize = Math.min(360 / 15, 360 / 15);
         movement = bSize/4;
@@ -125,8 +127,10 @@ public class Board extends JPanel implements ActionListener {
         public void keyPressed(KeyEvent e) {
 
             int key = e.getKeyCode();
-
-            if (key == KeyEvent.VK_LEFT && posX > 10) {
+            
+        
+            
+            if (key == KeyEvent.VK_LEFT && posX > 10 && t.isRunning()) {
                 nextPosX = posX - movement - 12;
                 if(checkGridMove(nextPosX, posY, grid)) {
                     grid[gridC][gridR] -= 2;
@@ -147,7 +151,7 @@ public class Board extends JPanel implements ActionListener {
              
               
                 
-            } else if (key == KeyEvent.VK_RIGHT && posX < d.width - 35) {
+            } else if (key == KeyEvent.VK_RIGHT && posX < d.width - 35 && t.isRunning()) {
                 nextPosX = posX + movement + 11;
                 System.out.println(gridC);
                 System.out.println(gridR);
@@ -170,7 +174,7 @@ public class Board extends JPanel implements ActionListener {
                 }
                 pacMan = new ImageIcon("src/images/PacManRight.gif").getImage();
                 
-            } else if (key == KeyEvent.VK_UP && posY > 10) {
+            } else if (key == KeyEvent.VK_UP && posY > 10 && t.isRunning()) {
                 nextPosY = posY - movement - 12;
                 if(checkGridMove(posX, nextPosY, grid)) {
                     grid[gridC][gridR] -= 2;
@@ -185,7 +189,7 @@ public class Board extends JPanel implements ActionListener {
                 }
                 pacMan = new ImageIcon("src/images/PacManUp.gif").getImage();
                
-            } else if (key == KeyEvent.VK_DOWN && posY < d.height - 75) {
+            } else if (key == KeyEvent.VK_DOWN && posY < d.height - 75  && t.isRunning()) {
                 nextPosY = posY + movement + 10;
                 if(checkGridMove(posX, nextPosY, grid)) {
                     grid[gridC][gridR] -= 2;
@@ -201,7 +205,7 @@ public class Board extends JPanel implements ActionListener {
                 pacMan = new ImageIcon("src/images/PacManDown.gif").getImage();
                 
             } 
-         else if(key == KeyEvent.VK_ESCAPE) {
+         else if(key == KeyEvent.VK_ESCAPE) {             
              System.exit(0);
 //          }
 //          else if(key == KeyEvent.VK_SPACE) {
@@ -229,6 +233,7 @@ public class Board extends JPanel implements ActionListener {
     
     
     public void startGame() {
+        t.start();
         score = 0; 
         livesLeft = 3;
         initLevel();
@@ -313,6 +318,7 @@ public class Board extends JPanel implements ActionListener {
         g2d.dispose();
     }
 
+   
     @Override
     public void actionPerformed(ActionEvent e) {
        //make sure that the counter does not overload

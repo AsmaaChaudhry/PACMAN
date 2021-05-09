@@ -41,6 +41,8 @@ public class Board extends JPanel implements ActionListener {
     private final int NUM_BLOCKS = 15;
     private final int MAX_GHOSTS = 13;
     public int counter = 0;
+    
+    public boolean inGame = false; 
 
     private static int[][] grid = { 
             { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
@@ -103,7 +105,9 @@ public class Board extends JPanel implements ActionListener {
         setFocusable(true);
         setBackground(Color.white);
         t = new Timer(40, this);
-        t.start();
+//        t.start();
+        
+        
 
         bSize = Math.min(360 / 15, 360 / 15);
         movement = bSize/4;
@@ -128,8 +132,10 @@ public class Board extends JPanel implements ActionListener {
         public void keyPressed(KeyEvent e) {
 
             int key = e.getKeyCode();
-
-            if (key == KeyEvent.VK_LEFT && posX > 10) {
+            
+        
+            
+            if (key == KeyEvent.VK_LEFT && posX > 10 && t.isRunning()) {
                 nextPosX = posX - movement - 12;
                 if(checkGridMove(nextPosX, posY, grid)) {
                     grid[gridC][gridR] -= 2;
@@ -150,7 +156,7 @@ public class Board extends JPanel implements ActionListener {
              
               
                 
-            } else if (key == KeyEvent.VK_RIGHT && posX < d.width - 35) {
+            } else if (key == KeyEvent.VK_RIGHT && posX < d.width - 35 && t.isRunning()) {
                 nextPosX = posX + movement + 11;
                 System.out.println(gridC);
                 System.out.println(gridR);
@@ -173,7 +179,7 @@ public class Board extends JPanel implements ActionListener {
                 }
                 pacMan = new ImageIcon("src/images/PacManRight.gif").getImage();
                 
-            } else if (key == KeyEvent.VK_UP && posY > 10) {
+            } else if (key == KeyEvent.VK_UP && posY > 10 && t.isRunning()) {
                 nextPosY = posY - movement - 12;
                 if(checkGridMove(posX, nextPosY, grid)) {
                     grid[gridC][gridR] -= 2;
@@ -188,7 +194,7 @@ public class Board extends JPanel implements ActionListener {
                 }
                 pacMan = new ImageIcon("src/images/PacManUp.gif").getImage();
                
-            } else if (key == KeyEvent.VK_DOWN && posY < d.height - 75) {
+            } else if (key == KeyEvent.VK_DOWN && posY < d.height - 75  && t.isRunning()) {
                 nextPosY = posY + movement + 10;
                 if(checkGridMove(posX, nextPosY, grid)) {
                     grid[gridC][gridR] -= 2;
@@ -204,8 +210,21 @@ public class Board extends JPanel implements ActionListener {
                 pacMan = new ImageIcon("src/images/PacManDown.gif").getImage();
                 
             } 
-         else if(key == KeyEvent.VK_ESCAPE) {
+         else if(key == KeyEvent.VK_ESCAPE) {             
              System.exit(0);
+
+//          }
+//          else if(key == KeyEvent.VK_SPACE) {
+//              //pause game
+//              //stop timer
+//              //pop up window saying game is paused??
+//          }
+            }
+         else if(key == KeyEvent.VK_S) {
+             inGame = true; 
+             startGame();
+         }
+
           }
           else if(key == KeyEvent.VK_SPACE) {
               //pause game
@@ -214,11 +233,29 @@ public class Board extends JPanel implements ActionListener {
               //stop timer
               //pop up window saying game is paused??
           }
-            
+           
             repaint();
         }
 
     }
+    
+    public void showOntoScreen(Graphics2D g2d) {
+        //String on screen to play game 
+        String start = "PRESS S TO START";
+        g2d.setColor(Color.white);
+        g2d.drawString(start, 130, 180);
+        
+    }
+    
+    
+    public void startGame() {
+        t.start();
+        score = 0; 
+        livesLeft = 3;
+        initLevel();
+        
+    }
+    
     
     public void initLevel() {
     	for (int i = 0; i < NUM_BLOCKS; i ++) {
@@ -291,11 +328,18 @@ public class Board extends JPanel implements ActionListener {
         for (short i = 0; i < livesLeft; i++) {
             g2d.drawImage(livesIcon, i * 28 + 90, 365, this);
         }
+        
+        
+        if (inGame == false) {
+            showOntoScreen(g2d);
+        }
+       
 
         Toolkit.getDefaultToolkit().sync();
         g2d.dispose();
     }
 
+   
     @Override
     public void actionPerformed(ActionEvent e) {
        //make sure that the counter does not overload
@@ -317,7 +361,9 @@ public class Board extends JPanel implements ActionListener {
 		if (checkCollision(posX,posY, Ghost.getGhostX(), Ghost.getGhostY()) == true){
 			livesLeft--;
             if (livesLeft == 0) {
-                System.exit(0);
+                inGame = false; 
+                startGame();
+                
             }
             posX = 10;
             posY = 10;

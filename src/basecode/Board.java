@@ -31,7 +31,11 @@ public class Board extends JPanel implements ActionListener {
     private Image removedPellet = new ImageIcon("src/images/removedPellet.png").getImage();
     //make a test ghost
     private Ghost testGhost = new Ghost("src/images/whiteGhost.gif", 50, 150, 5);
+
     private Ghost blueGhost = new Ghost("src/images/blueGhost1.gif", 20, 20, 5);
+
+    private Ghost testGhost2 = new Ghost("src/images/blueGhost1.gif", 60, 160, 6);
+
     private int bSize, movement;
     private int gridC, gridR;
     private final int NUM_BLOCKS = 15;
@@ -55,6 +59,23 @@ public class Board extends JPanel implements ActionListener {
             { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
             { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 } };
     private boolean[][] grid2 = { 
+            { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true },
+            { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true }, 
+            { true, true, true, true, true, true, true, true, true, true, true, false, true, true, true},
+            { true, true, true, false, false,false, true, true, true, true, true, true, true, true, true },
+            { true, true, true, false, false,false, true, true, true, true, true, true, true, true, true  },
+            { true, true, true, false, false, false,  true, true, true, false, false, false,  false, true, true }, 
+            { true, true, true, true, true, true, true, true, true, false, false, false,  false, true, true },
+            { true,true,true, true, true, true, true, true, true, false, false, false, false, true, true }, 
+            { true,true,true, true, true, true, true, true, true, false, false, false, false, true, true },
+            { true, true, true, false, false, false, true, true, true, false, false, false, false, true, true },
+            { true, true, true, false, false, false, true, true, true, false, false, false, false, true, true }, 
+            { true, true, true, false, false, false, true, true, true, true, true, true, true, true, true },
+            { true, true, true, true, true, true, true, true, true, true, true, false, true, true, true }, 
+            { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true },
+            {true, true, true, true, true, true, true, true, true, true, true, true, true, true, true } };
+    
+    private final boolean[][] GRID3 = { 
             { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true },
             { true, true, true, true, true, true, true, true, true, true, true, true, true, true, true }, 
             { true, true, true, true, true, true, true, true, true, true, true, false, true, true, true},
@@ -198,6 +219,15 @@ public class Board extends JPanel implements ActionListener {
         }
 
     }
+    
+    public void initLevel() {
+    	for (int i = 0; i < NUM_BLOCKS; i ++) {
+    		for (int j = 0; j < NUM_BLOCKS; j ++) {
+    			grid2[i][j] = GRID3[i][j];
+    		}
+    	}
+    	repaint();
+    }
 
     @Override
     public void paintComponent(Graphics g) {
@@ -208,6 +238,14 @@ public class Board extends JPanel implements ActionListener {
 
         g2d.setColor(Color.black);
         g2d.fillRect(0, 0, d.width, d.height);
+        
+        if (score > 1 && score % 181 == 0) {
+        	initLevel();
+        	System.out.println("I am here!");
+        	if (GRID3[0][0] == false) {
+        		System.out.println("oh no!");
+        	}
+        }
 
         // draw grid
         g2d.setColor(Color.green);
@@ -218,7 +256,7 @@ public class Board extends JPanel implements ActionListener {
                     g2d.drawImage(pellet, (i * bSize) + 10, (j * bSize) + 10, this);
                 } // draw pellet
                 else if (grid2[i][j] == false){
-                    g2d.drawImage(removedPellet, i * bSize, j * bSize, this);
+                    g2d.drawImage(removedPellet, (i * bSize) + 10, (j * bSize) + 10, this);
                   }// removes pellet
  
             }
@@ -237,7 +275,12 @@ public class Board extends JPanel implements ActionListener {
         g2d.drawImage(pacMan, posX, posY, this);
         //draw the test ghost
         g2d.drawImage(testGhost.getIcon(), testGhost.getGhostX(), testGhost.getGhostY(), this);
+
         g2d.drawImage(blueGhost.getIcon(), blueGhost.getGhostX(), blueGhost.getGhostY(), this);
+
+        g2d.drawImage(testGhost2.getIcon(), testGhost2.getGhostX(), testGhost2.getGhostY(), this);
+
+
         g2d.setFont(smallFont);
         g2d.setColor(Color.white);
         g2d.drawString("Score: " + String.valueOf(score)  , 276, 380);
@@ -261,13 +304,27 @@ public class Board extends JPanel implements ActionListener {
 	    }
 	 // update ghost position
 	    testGhost.move(counter);
+
 	    blueGhost.move(counter);
+
+	    testGhost2.move(counter);
+
 	    counter ++;
 		repaint();
 
 		
 
-    }
+		if (checkCollision(posX,posY, Ghost.getGhostX(), Ghost.getGhostY()) == true){
+			livesLeft--;
+            if (livesLeft == 0) {
+                System.exit(0);
+            }
+            posX = 10;
+            posY = 10;
+            testGhost = new Ghost("src/images/whiteGhost.gif", 50, 150, 5);
+
+		}
+
     
     private boolean checkCollision(int pManX, int pManY, Ghost ghost) {
         int ghostX = ghost.getGhostX();
@@ -286,4 +343,6 @@ public class Board extends JPanel implements ActionListener {
         return false;
     }
 
+
 }
+

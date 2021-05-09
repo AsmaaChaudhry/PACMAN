@@ -36,6 +36,8 @@ public class Board extends JPanel implements ActionListener {
     private final int NUM_BLOCKS = 15;
     private final int MAX_GHOSTS = 13;
     public int counter = 0;
+    
+    public boolean inGame = false; 
 
     private static int[][] grid = { 
             { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
@@ -208,10 +210,31 @@ public class Board extends JPanel implements ActionListener {
 //              //pop up window saying game is paused??
 //          }
             }
+         else if(key == KeyEvent.VK_S) {
+             inGame = true; 
+             startGame();
+         }
             repaint();
         }
 
     }
+    
+    public void showOntoScreen(Graphics2D g2d) {
+        //String on screen to play game 
+        String start = "PRESS S TO START";
+        g2d.setColor(Color.white);
+        g2d.drawString(start, 130, 180);
+        
+    }
+    
+    
+    public void startGame() {
+        score = 0; 
+        livesLeft = 3;
+        initLevel();
+        
+    }
+    
     
     public void initLevel() {
     	for (int i = 0; i < NUM_BLOCKS; i ++) {
@@ -279,6 +302,12 @@ public class Board extends JPanel implements ActionListener {
         for (short i = 0; i < livesLeft; i++) {
             g2d.drawImage(livesIcon, i * 28 + 90, 365, this);
         }
+        
+        
+        if (inGame == false) {
+            showOntoScreen(g2d);
+        }
+       
 
         Toolkit.getDefaultToolkit().sync();
         g2d.dispose();
@@ -299,7 +328,9 @@ public class Board extends JPanel implements ActionListener {
 		if (checkCollision(posX,posY, Ghost.getGhostX(), Ghost.getGhostY()) == true){
 			livesLeft--;
             if (livesLeft == 0) {
-                System.exit(0);
+                inGame = false; 
+                startGame();
+                
             }
             posX = 10;
             posY = 10;

@@ -11,7 +11,7 @@ public class Ghost {
     public int speed = 2;
     private int ghostDir;
     private int minDir = 1;
-    private int maxDir = 4;
+    private int maxDir = 4; 
     
     public Ghost(String imagePath, int ghostX, int ghostY) {
         this.ghostX = ghostX;
@@ -37,12 +37,12 @@ public class Ghost {
      * @return image Icon for the ghost
      */
     public Image getIcon() {
-        Image ghostIcon = new ImageIcon(imagePath).getImage();
+        Image ghostIcon = new ImageIcon(this.imagePath).getImage();
         return ghostIcon;
     }
     /**
      * Sets the ghost's direction to be a random int between 1 and 4
-     * @return
+     * @return the random int between 1 and 4
      */
     private int setGhostDir() {
         ghostDir = (int) Math.floor(Math.random()*(maxDir-minDir+1)+minDir);
@@ -72,7 +72,11 @@ public class Ghost {
         
         return false;
     }
-    
+
+    public void pause() {
+        this.ghostDir = 5;
+    }
+
     /**
      * Moves the ghost autonomously at random
      */
@@ -105,6 +109,9 @@ public class Ghost {
             if(checkValid(this.ghostX, newPos, Board.getGrid())== true) {
                 ghostY-=this.speed;
             }
+        }else if (ghostDir == 5) {
+            this.ghostX+=0;
+            this.ghostY+=0;
         }
     }
 }

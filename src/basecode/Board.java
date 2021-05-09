@@ -31,6 +31,7 @@ public class Board extends JPanel implements ActionListener {
     private Image removedPellet = new ImageIcon("src/images/removedPellet.png").getImage();
     //make a test ghost
     private Ghost testGhost = new Ghost("src/images/whiteGhost.gif", 50, 150, 5);
+    private Ghost blueGhost = new Ghost("src/images/blueGhost1.gif", 20, 20, 5);
     private int bSize, movement;
     private int gridC, gridR;
     private final int NUM_BLOCKS = 15;
@@ -184,13 +185,15 @@ public class Board extends JPanel implements ActionListener {
             } 
          else if(key == KeyEvent.VK_ESCAPE) {
              System.exit(0);
-//          }
-//          else if(key == KeyEvent.VK_SPACE) {
-//              //pause game
-//              //stop timer
-//              //pop up window saying game is paused??
-//          }
-            }
+          }
+          else if(key == KeyEvent.VK_SPACE) {
+              //pause game
+              testGhost.pause();
+              blueGhost.pause();
+              //stop timer
+              //pop up window saying game is paused??
+          }
+            
             repaint();
         }
 
@@ -234,7 +237,7 @@ public class Board extends JPanel implements ActionListener {
         g2d.drawImage(pacMan, posX, posY, this);
         //draw the test ghost
         g2d.drawImage(testGhost.getIcon(), testGhost.getGhostX(), testGhost.getGhostY(), this);
-
+        g2d.drawImage(blueGhost.getIcon(), blueGhost.getGhostX(), blueGhost.getGhostY(), this);
         g2d.setFont(smallFont);
         g2d.setColor(Color.white);
         g2d.drawString("Score: " + String.valueOf(score)  , 276, 380);
@@ -258,16 +261,17 @@ public class Board extends JPanel implements ActionListener {
 	    }
 	 // update ghost position
 	    testGhost.move(counter);
+	    blueGhost.move(counter);
 	    counter ++;
 		repaint();
 
 		
-		if (checkCollision(posX,posY, Ghost.getGhostX(), Ghost.getGhostY()) == true){
-		    System.out.println("C");
-		}
+
     }
     
-    private boolean checkCollision(int pManX, int pManY, int ghostX, int ghostY) {
+    private boolean checkCollision(int pManX, int pManY, Ghost ghost) {
+        int ghostX = ghost.getGhostX();
+        int ghostY = ghost.getGhostY();
         int pCX = (pManX + pManX + (pManX +22) + (pManX+22))/4;
         int pCY = (pManY + pManY + (pManY - 22) + (pManY-22))/4;
         int gCX = (ghostX + ghostX + (ghostX +22) + (ghostX+22))/4;
@@ -282,5 +286,4 @@ public class Board extends JPanel implements ActionListener {
         return false;
     }
 
-}
 }

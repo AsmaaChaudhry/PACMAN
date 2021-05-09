@@ -31,6 +31,7 @@ public class Ghost {
     public int getGhostY() {
         return this.ghostY;
     }
+    
     /**
      * Make a new image Icon for a ghost
      * @return image Icon for the ghost
@@ -71,6 +72,7 @@ public class Ghost {
         
         return false;
     }
+    
     /**
      * Moves the ghost autonomously at random
      */

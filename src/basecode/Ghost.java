@@ -5,8 +5,8 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 
 public class Ghost {
-    public static int ghostX;
-    public static int ghostY;
+    public int ghostX;
+    public int ghostY;
     public String imagePath;
     public int speed = 2;
     private int ghostDir;
@@ -24,12 +24,12 @@ public class Ghost {
         this.imagePath = imagePath;
         this.speed = speed;
     }
-    public static int getGhostX() {
-        return ghostX;
+    public int getGhostX() {
+        return this.ghostX;
         }
         
-    public static int getGhostY() {
-        return ghostY;
+    public int getGhostY() {
+        return this.ghostY;
     }
     /**
      * Make a new image Icon for a ghost

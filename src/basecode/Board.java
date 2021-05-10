@@ -278,7 +278,29 @@ public class Board extends JPanel implements ActionListener {
 		gridC = posX / bSize;
 		gridR = posY / bSize;
 		newGhosts++;
-
+		
+		if (newGhosts == 1) {
+			mauveGhost.setActive(true);
+		} else if (newGhosts == 2) {
+			tealGhost.setActive(true);
+		} else if (newGhosts == 3) {
+			greenGhost2.setActive(true);
+		} else if (newGhosts == 4) {
+			whiteGhost.setActive(true);
+		} else if (newGhosts == 5) {
+			blueGhost2.setActive(true);
+		} else if (newGhosts == 6) {
+			pinkGhost.setActive(true);
+		} else if (newGhosts == 7) {
+			purpleGhost.setActive(true);
+		} else if (newGhosts == 8) {
+			redGhost.setActive(true);
+		} else if (newGhosts == 9) {
+			greenGhost2.setActive(true);
+		} else if (newGhosts == 10) {
+			orangeGhost.setActive(true);
+		}
+		
 		repaint();
 	}
 
@@ -337,7 +359,15 @@ public class Board extends JPanel implements ActionListener {
 		ghosts.add(blueGhost1);
 		ghosts.add(yellowGhost);
 		
-		if (newGhosts >= 1) {
+		if (mauveGhost.getActive()) {
+			ghosts.add(mauveGhost);
+			g2d.drawImage(mauveGhost.getIcon(), mauveGhost.getGhostX(), mauveGhost.getGhostY(), this);
+		} if (tealGhost.getActive()) {
+			ghosts.add(tealGhost);
+			g2d.drawImage(tealGhost.getIcon(), tealGhost.getGhostX(), tealGhost.getGhostY(), this);
+		}
+		
+		/*if (newGhosts >= 1) {
 			g2d.drawImage(mauveGhost.getIcon(), mauveGhost.getGhostX(), mauveGhost.getGhostY(), this);
 			mauveGhost.setActive(true);
 			ghosts.add(mauveGhost);
@@ -377,7 +407,7 @@ public class Board extends JPanel implements ActionListener {
 			g2d.drawImage(orangeGhost.getIcon(), orangeGhost.getGhostX(), orangeGhost.getGhostY(), this);
 			orangeGhost.setActive(true);
 			ghosts.add(orangeGhost);
-		}
+		}*/
 
 		g2d.setFont(smallFont);
 		g2d.setColor(Color.white);
@@ -473,7 +503,7 @@ public class Board extends JPanel implements ActionListener {
 				} if (whiteGhost.getActive()) {
 					whiteGhost = new Ghost("src/images/whiteGhost.gif", 150, 250, 5);
 				} if (yellowGhost.getActive()) {
-					yellowGhost = new Ghost("src/images/yellowGhost.gif", 160, 260, 5);
+					yellowGhost = new Ghost("src/images/yellowGhost.gif", 160, 150, 5);
 				}
 			}
 		}

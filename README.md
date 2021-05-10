@@ -7,6 +7,13 @@ Welcome to the Tigerfish Team Pac-Man game. Here you will find a basic set of in
 
 This project was coded by Ezri Braid-Grizzel, Asmaa Chaudhry, Emily Nishikimoto, Nicole Roberts, and Liz Sevigny. Starter code was provided by Prof. Melody Su.
 
+### How to Access the Game
+1. Click the green 'Code' button and copy the HTTPS link.
+2. Open your system terminal and change to the desired directory by typing 'cd' + the directory path into the command line.
+3. When you are in the desired directory, type 'git clone' + the URL you copied from GitHub.
+4. Type 'cd project-pacman-tigerfish' into the command line.
+5. Compile the code by typing 'javac -d bin src/*.java'
+6. Run the code by typing 'java -cp bin BlobAnimation' into the command line. A new window should pop up, allowing you to play the game.
 
 ### Basic Game Play
 

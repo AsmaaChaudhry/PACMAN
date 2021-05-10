@@ -9,9 +9,10 @@ public class Ghost {
     public int ghostY;
     public String imagePath;
     public int speed = 2;
-    private int ghostDir;
+    public int ghostDir;
     private int minDir = 1;
     private int maxDir = 4; 
+    private boolean active = false;
     
     public Ghost(String imagePath, int ghostX, int ghostY) {
         this.ghostX = ghostX;
@@ -30,6 +31,18 @@ public class Ghost {
         
     public int getGhostY() {
         return this.ghostY;
+    }
+    
+    public String getImagePath() {
+    	return this.imagePath;
+    }
+    
+    public void setActive(boolean activity) {
+    	this.active = activity;
+    }
+    
+    public boolean getActive() {
+    	return this.active;
     }
     
     /**
@@ -113,5 +126,6 @@ public class Ghost {
             this.ghostX+=0;
             this.ghostY+=0;
         }
+
     }
 }

@@ -424,9 +424,6 @@ public class Board extends JPanel implements ActionListener {
 			showOntoScreen(g2d);
 		}
 
-		Toolkit.getDefaultToolkit().sync();
-		g2d.dispose();
-	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -461,9 +458,9 @@ public class Board extends JPanel implements ActionListener {
 		} if (yellowGhost.getActive()) {
 			yellowGhost.move(counter);
 		}
-
 		counter++;
-		repaint();
+		repaint();}
+
 
 		for (Ghost ghost: ghosts) {
 			if (checkCollision(posX, posY, ghost)) {
@@ -509,6 +506,13 @@ public class Board extends JPanel implements ActionListener {
 		}
 	}
 
+    /**
+     * Checks if there is a collision between pacman and a ghost 
+     * @param pManX - the x position of the pacman
+     * @param pManY - the y position of the pacman
+     * @param ghost - the ghost object to check if there is a collision with pacman
+     * @return true if there is a collision 
+     */
 	private boolean checkCollision(int pManX, int pManY, Ghost ghost) {
 		int ghostX = ghost.getGhostX();
 		int ghostY = ghost.getGhostY();

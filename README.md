@@ -18,7 +18,7 @@ Pac-Man will lose a life; lose all three, and it's game over!
 
 Once Pac-Man has eaten all the pellets on-screen, your will move to the next level. Each time you level up, the 
 pellets will respawn and an additional ghost will spawn on the maze. You win the game when you make it to
-Level 12 without losing all your lives. 
+Level 11 without losing all your lives. 
 
 
 ### Game Manager

@@ -314,18 +314,24 @@ public class Board extends JPanel implements ActionListener {
 
 		
 
-		if (checkCollision(posX,posY, Ghost.getGhostX(), Ghost.getGhostY()) == true){
+		if (checkCollision(posX,posY, testGhost) == true){
 			livesLeft--;
             if (livesLeft == 0) {
                 System.exit(0);
             }
             posX = 10;
             posY = 10;
-            testGhost = new Ghost("src/images/whiteGhost.gif", 50, 150, 5);
+            testGhost = new Ghost("src/images/whiteGhost.gif", 50, 150, 5);}
 
 		}
 
-    
+    /**
+     * Checks if there is a collision between pacman and a ghost 
+     * @param pManX - the x position of the pacman
+     * @param pManY - the y position of the pacman
+     * @param ghost - the ghost object to check if there is a collision with pacman
+     * @return true if there is a collision 
+     */
     private boolean checkCollision(int pManX, int pManY, Ghost ghost) {
         int ghostX = ghost.getGhostX();
         int ghostY = ghost.getGhostY();

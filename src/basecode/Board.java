@@ -31,10 +31,19 @@ public class Board extends JPanel implements ActionListener {
 	private Image pellet = new ImageIcon("src/images/Pellet.png").getImage();
 	private Image removedPellet = new ImageIcon("src/images/removedPellet.png").getImage();
 	// make a test ghost
-
-	private Ghost testGhost = new Ghost("src/images/whiteGhost.gif", 50, 150, 5);
-
-	private Ghost testGhost2 = new Ghost("src/images/blueGhost1.gif", 60, 160, 6);
+	
+	private Ghost blueGhost1 = new Ghost("src/images/blueGhost1.gif", 50, 150, 5);
+    private Ghost blueGhost2 = new Ghost("src/images/blueGhost2.gif", 60, 160, 6);
+    private Ghost greenGhost1 = new Ghost("src/images/greenGhost1.gif", 70, 170, 5);
+    private Ghost greenGhost2 = new Ghost("src/images/greenGhost2.gif", 80, 180, 4);
+    private Ghost mauveGhost = new Ghost("src/images/mauveGhost.gif", 90, 190, 3);
+    private Ghost orangeGhost = new Ghost("src/images/orangeGhost.gif", 100, 200, 2);
+    private Ghost pinkGhost = new Ghost("src/images/pinkGhost.gif", 110, 210, 5);
+    private Ghost purpleGhost = new Ghost("src/images/purpleGhost.gif", 120, 220, 6);
+    private Ghost redGhost = new Ghost("src/images/redGhost.gif", 130, 230, 4);
+    private Ghost tealGhost = new Ghost("src/images/tealGhost.gif", 140, 240, 3);
+    private Ghost whiteGhost = new Ghost("src/images/whiteGhost.gif", 150, 250, 5);
+    private Ghost yellowGhost = new Ghost("src/images/yellowGhost.gif", 160, 150, 5);
 	
 	private List<Ghost> ghosts = new ArrayList<>();
 
@@ -45,6 +54,7 @@ public class Board extends JPanel implements ActionListener {
 	public int counter = 0;
 	private int numLevel;
 	private int numGhost;
+	private int newGhosts;
 	public boolean inGame = false;
 	public boolean paused = false;
 
@@ -251,6 +261,7 @@ public class Board extends JPanel implements ActionListener {
 		livesLeft = 3;
 		numLevel = 1;
 		numGhost = 2;
+		newGhosts = -1;
 		initLevel();
 
 	}
@@ -266,7 +277,7 @@ public class Board extends JPanel implements ActionListener {
 
 		gridC = posX / bSize;
 		gridR = posY / bSize;
-		numGhost++;
+		newGhosts++;
 
 		repaint();
 	}
@@ -282,10 +293,11 @@ public class Board extends JPanel implements ActionListener {
 		g2d.fillRect(0, 0, d.width, d.height);
 
 		if (score > 1 && score % 181 == 0) {
+			numLevel++;
 			initLevel();
 		}
 
-		if (numGhost == MAX_GHOSTS) {
+		if (numGhost > MAX_GHOSTS) {
 			g2d.drawString("Congrats, you won!!", 130, 180);
 		}
 
@@ -316,12 +328,56 @@ public class Board extends JPanel implements ActionListener {
 
 		g2d.drawImage(pacMan, posX, posY, this);
 		// draw the test ghost
-		g2d.drawImage(testGhost.getIcon(), testGhost.getGhostX(), testGhost.getGhostY(), this);
+		g2d.drawImage(blueGhost1.getIcon(), blueGhost1.getGhostX(), blueGhost1.getGhostY(), this);
+		blueGhost1.setActive(true);
 
-		g2d.drawImage(testGhost2.getIcon(), testGhost2.getGhostX(), testGhost2.getGhostY(), this);
+		g2d.drawImage(yellowGhost.getIcon(), yellowGhost.getGhostX(), yellowGhost.getGhostY(), this);
+		yellowGhost.setActive(true);
 		
-		ghosts.add(testGhost);
-		ghosts.add(testGhost2);
+		ghosts.add(blueGhost1);
+		ghosts.add(yellowGhost);
+		
+		if (newGhosts >= 1) {
+			g2d.drawImage(mauveGhost.getIcon(), mauveGhost.getGhostX(), mauveGhost.getGhostY(), this);
+			mauveGhost.setActive(true);
+			ghosts.add(mauveGhost);
+		} if (newGhosts >= 2) {
+			g2d.drawImage(tealGhost.getIcon(), tealGhost.getGhostX(), tealGhost.getGhostY(), this);
+			tealGhost.setActive(true);
+			ghosts.add(tealGhost);
+		} if (newGhosts >= 3) {
+			g2d.drawImage(greenGhost1.getIcon(), greenGhost1.getGhostX(), greenGhost1.getGhostY(), this);
+			greenGhost1.setActive(true);
+			ghosts.add(greenGhost1);
+		} if (newGhosts >= 4) {
+			g2d.drawImage(whiteGhost.getIcon(), whiteGhost.getGhostX(), whiteGhost.getGhostY(), this);
+			whiteGhost.setActive(true);
+			ghosts.add(whiteGhost);
+		} if (newGhosts >= 5) {
+			g2d.drawImage(blueGhost2.getIcon(), blueGhost2.getGhostX(), blueGhost2.getGhostY(), this);
+			blueGhost2.setActive(true);
+			ghosts.add(blueGhost2);
+		} if (newGhosts >= 6) {
+			g2d.drawImage(pinkGhost.getIcon(), pinkGhost.getGhostX(), pinkGhost.getGhostY(), this);
+			pinkGhost.setActive(true);
+			ghosts.add(pinkGhost);
+		} if (newGhosts >= 7) {
+			g2d.drawImage(purpleGhost.getIcon(), purpleGhost.getGhostX(), purpleGhost.getGhostY(), this);
+			purpleGhost.setActive(true);
+			ghosts.add(purpleGhost);
+		} if (newGhosts >= 8) {
+			g2d.drawImage(redGhost.getIcon(), redGhost.getGhostX(), redGhost.getGhostY(), this);
+			redGhost.setActive(true);
+			ghosts.add(redGhost);
+		} if (newGhosts >= 9) {
+			g2d.drawImage(greenGhost2.getIcon(), greenGhost2.getGhostX(), greenGhost2.getGhostY(), this);
+			greenGhost2.setActive(true);
+			ghosts.add(greenGhost2);
+		} if (newGhosts >= 10) {
+			g2d.drawImage(orangeGhost.getIcon(), orangeGhost.getGhostX(), orangeGhost.getGhostY(), this);
+			orangeGhost.setActive(true);
+			ghosts.add(orangeGhost);
+		}
 
 		g2d.setFont(smallFont);
 		g2d.setColor(Color.white);
@@ -349,9 +405,32 @@ public class Board extends JPanel implements ActionListener {
 			counter = 0;
 		}
 		// update ghost position
-		testGhost.move(counter);
-
-		testGhost2.move(counter);
+		
+		if (blueGhost1.getActive()) {
+			blueGhost1.move(counter);
+		} if (blueGhost2.getActive()) {
+			blueGhost2.move(counter);
+		} if (greenGhost1.getActive()) {
+			greenGhost1.move(counter);
+		} if (greenGhost2.getActive()) {
+			greenGhost2.move(counter);
+		} if (mauveGhost.getActive()) {
+			mauveGhost.move(counter);
+		} if (orangeGhost.getActive()) {
+			orangeGhost.move(counter);
+		} if (pinkGhost.getActive()) {
+			pinkGhost.move(counter);
+		} if (purpleGhost.getActive()) {
+			purpleGhost.move(counter);
+		} if (redGhost.getActive()) {
+			redGhost.move(counter);
+		} if (tealGhost.getActive()) {
+			tealGhost.move(counter);
+		} if (whiteGhost.getActive()) {
+			whiteGhost.move(counter);
+		} if (yellowGhost.getActive()) {
+			yellowGhost.move(counter);
+		}
 
 		counter++;
 		repaint();
@@ -361,6 +440,8 @@ public class Board extends JPanel implements ActionListener {
 				livesLeft--;
 				if (livesLeft == 0) {
 				inGame = false;
+				ghost.setActive(false);
+				//break;
 				startGame();
 				}
 				
@@ -369,8 +450,31 @@ public class Board extends JPanel implements ActionListener {
 				gridC = posX/bSize;
 				gridR = posY/bSize;
 				
-				testGhost = new Ghost("src/images/whiteGhost.gif", 50, 150, 5);
-				testGhost2 = new Ghost("src/images/blueGhost1.gif", 60, 160, 6);
+				if (blueGhost1.getActive()) {
+					blueGhost1 = new Ghost("src/images/blueGhost1.gif", 50, 150, 5);
+				} if (blueGhost2.getActive()) {
+					blueGhost2 = new Ghost("src/images/blueGhost2.gif", 60, 160, 6);
+				} if (greenGhost1.getActive()) {
+					greenGhost1 = new Ghost("src/images/greenGhost1.gif", 70, 170, 5);
+				} if (greenGhost2.getActive()) {
+					greenGhost2 = new Ghost("src/images/greenGhost2.gif", 80, 180, 4);
+				} if (mauveGhost.getActive()) {
+					mauveGhost = new Ghost("src/images/mauveGhost.gif", 90, 190, 3);
+				} if (orangeGhost.getActive()) {
+					orangeGhost = new Ghost("src/images/orangeGhost.gif", 100, 200, 2);
+				} if (pinkGhost.getActive()) {
+					pinkGhost = new Ghost("src/images/pinkGhost.gif", 110, 210, 5);
+				} if (purpleGhost.getActive()) {
+					purpleGhost = new Ghost("src/images/purpleGhost.gif", 120, 220, 6);
+				} if (redGhost.getActive()) {
+					redGhost = new Ghost("src/images/redGhost.gif", 130, 230, 4);
+				} if (tealGhost.getActive()) {
+					tealGhost = new Ghost("src/images/tealGhost.gif", 140, 240, 3);
+				} if (whiteGhost.getActive()) {
+					whiteGhost = new Ghost("src/images/whiteGhost.gif", 150, 250, 5);
+				} if (yellowGhost.getActive()) {
+					yellowGhost = new Ghost("src/images/yellowGhost.gif", 160, 260, 5);
+				}
 			}
 		}
 	}

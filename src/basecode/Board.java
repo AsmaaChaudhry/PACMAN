@@ -20,6 +20,7 @@ import javax.swing.Timer;
 
 public class Board extends JPanel implements ActionListener {
 
+
 	private Dimension d;
 	private int livesLeft, score;
 	private int posX, posY, nextPosX, nextPosY; // put in PacMan class

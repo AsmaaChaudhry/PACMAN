@@ -37,12 +37,12 @@ public class Board extends JPanel implements ActionListener {
     private Ghost greenGhost1 = new Ghost("src/images/greenGhost1.gif", 70, 170, 5);
     private Ghost greenGhost2 = new Ghost("src/images/greenGhost2.gif", 80, 180, 4);
     private Ghost mauveGhost = new Ghost("src/images/mauveGhost.gif", 90, 190, 3);
-    private Ghost orangeGhost = new Ghost("src/images/orangeGhost.gif", 100, 200, 2);
-    private Ghost pinkGhost = new Ghost("src/images/pinkGhost.gif", 110, 210, 5);
-    private Ghost purpleGhost = new Ghost("src/images/purpleGhost.gif", 120, 220, 6);
-    private Ghost redGhost = new Ghost("src/images/redGhost.gif", 130, 230, 4);
-    private Ghost tealGhost = new Ghost("src/images/tealGhost.gif", 140, 240, 3);
-    private Ghost whiteGhost = new Ghost("src/images/whiteGhost.gif", 150, 250, 5);
+    private Ghost orangeGhost = new Ghost("src/images/orangeGhost.gif", 100, 150, 2);
+    private Ghost pinkGhost = new Ghost("src/images/pinkGhost.gif", 110, 150, 5);
+    private Ghost purpleGhost = new Ghost("src/images/purpleGhost.gif", 120, 150, 6);
+    private Ghost redGhost = new Ghost("src/images/redGhost.gif", 130, 150, 4);
+    private Ghost tealGhost = new Ghost("src/images/tealGhost.gif", 140, 150, 3);
+    private Ghost whiteGhost = new Ghost("src/images/whiteGhost.gif", 150, 150, 5);
     private Ghost yellowGhost = new Ghost("src/images/yellowGhost.gif", 160, 150, 5);
 	
 	private List<Ghost> ghosts = new ArrayList<>();

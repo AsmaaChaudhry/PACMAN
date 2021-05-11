@@ -32,8 +32,8 @@ public class Board extends JPanel implements ActionListener {
 	private Image pellet = new ImageIcon("src/images/Pellet.png").getImage();
 	private Image removedPellet = new ImageIcon("src/images/removedPellet.png").getImage();
 	
-	private Ghost blueGhost1 = new Ghost("src/images/blueGhost1.gif", 50, 150, 5); // make setters for xy to update the ghost respawn points 
-    private Ghost blueGhost2 = new Ghost("src/images/blueGhost2.gif", 60, 160, 6);
+	private Ghost blueGhost1 = new Ghost("src/images/blueGhost1.gif", 50, 150, 1); // make setters for xy to update the ghost respawn points 
+    private Ghost blueGhost2 = new Ghost("src/images/blueGhost2.gif", 60, 160, 8);
     private Ghost greenGhost1 = new Ghost("src/images/greenGhost1.gif", 70, 170, 5);
     private Ghost greenGhost2 = new Ghost("src/images/greenGhost2.gif", 80, 180, 4);
     private Ghost mauveGhost = new Ghost("src/images/mauveGhost.gif", 90, 190, 3);
@@ -42,7 +42,7 @@ public class Board extends JPanel implements ActionListener {
     private Ghost purpleGhost = new Ghost("src/images/purpleGhost.gif", 120, 150, 6);
     private Ghost redGhost = new Ghost("src/images/redGhost.gif", 130, 150, 4);
     private Ghost tealGhost = new Ghost("src/images/tealGhost.gif", 140, 150, 3);
-    private Ghost whiteGhost = new Ghost("src/images/whiteGhost.gif", 150, 150, 5);
+    private Ghost whiteGhost = new Ghost("src/images/whiteGhost.gif", 150, 150, 7);
     private Ghost yellowGhost = new Ghost("src/images/yellowGhost.gif", 160, 150, 5);
 	
 	private List<Ghost> ghosts = new ArrayList<>();
@@ -67,38 +67,38 @@ public class Board extends JPanel implements ActionListener {
 			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 } };
 
 	private boolean[][] grid2 = {
-			{ true, true, true, true, true, true, true, true, true, true, true, true, true, true, true },
-			{ true, true, true, true, true, true, true, true, true, true, true, true, true, true, true },
-			{ true, true, true, true, true, true, true, true, true, true, true, false, true, true, true },
-			{ true, true, true, false, false, false, true, true, true, true, true, true, true, true, true },
-			{ true, true, true, false, false, false, true, true, true, true, true, true, true, true, true },
-			{ true, true, true, false, false, false, true, true, true, false, false, false, false, true, true },
-			{ true, true, true, true, true, true, true, true, true, false, false, false, false, true, true },
-			{ true, true, true, true, true, true, true, true, true, false, false, false, false, true, true },
-			{ true, true, true, true, true, true, true, true, true, false, false, false, false, true, true },
-			{ true, true, true, false, false, false, true, true, true, false, false, false, false, true, true },
-			{ true, true, true, false, false, false, true, true, true, false, false, false, false, true, true },
-			{ true, true, true, false, false, false, true, true, true, true, true, true, true, true, true },
-			{ true, true, true, true, true, true, true, true, true, true, true, false, true, true, true },
-			{ true, true, true, true, true, true, true, true, true, true, true, true, true, true, true },
-			{ true, true, true, true, true, true, true, true, true, true, true, true, true, true, true } };
+			{ true, true, false, false, false, false, false, false, false, false, false, false, false, false, false },
+			{ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false },
+			{ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false },
+			{ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false },
+			{ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false },
+			{ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false },
+			{ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false },
+			{ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false },
+			{ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false },
+			{ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false },
+			{ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false },
+			{ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false },
+			{ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false },
+			{ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false },
+			{ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false } };
 
 	private final boolean[][] GRID3 = {
-			{ true, true, true, true, true, true, true, true, true, true, true, true, true, true, true },
-			{ true, true, true, true, true, true, true, true, true, true, true, true, true, true, true },
-			{ true, true, true, true, true, true, true, true, true, true, true, false, true, true, true },
-			{ true, true, true, false, false, false, true, true, true, true, true, true, true, true, true },
-			{ true, true, true, false, false, false, true, true, true, true, true, true, true, true, true },
-			{ true, true, true, false, false, false, true, true, true, false, false, false, false, true, true },
-			{ true, true, true, true, true, true, true, true, true, false, false, false, false, true, true },
-			{ true, true, true, true, true, true, true, true, true, false, false, false, false, true, true },
-			{ true, true, true, true, true, true, true, true, true, false, false, false, false, true, true },
-			{ true, true, true, false, false, false, true, true, true, false, false, false, false, true, true },
-			{ true, true, true, false, false, false, true, true, true, false, false, false, false, true, true },
-			{ true, true, true, false, false, false, true, true, true, true, true, true, true, true, true },
-			{ true, true, true, true, true, true, true, true, true, true, true, false, true, true, true },
-			{ true, true, true, true, true, true, true, true, true, true, true, true, true, true, true },
-			{ true, true, true, true, true, true, true, true, true, true, true, true, true, true, true } };
+			{ true, true, false, false, false, false, false, false, false, false, false, false, false, false, false },
+			{ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false },
+			{ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false },
+			{ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false },
+			{ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false },
+			{ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false },
+			{ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false },
+			{ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false },
+			{ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false },
+			{ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false },
+			{ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false },
+			{ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false },
+			{ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false },
+			{ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false },
+			{ false, false, false, false, false, false, false, false, false, false, false, false, false, false, false } };
 
 	public Board(int w, int h) {
 
@@ -254,6 +254,7 @@ public class Board extends JPanel implements ActionListener {
 		score = 0;
 		livesLeft = 3;
 		numGhost = 2;
+		ghosts.clear();
 		initLevel();
 
 	}
@@ -304,11 +305,6 @@ public class Board extends JPanel implements ActionListener {
 
 		g2d.setColor(Color.black);
 		g2d.fillRect(0, 0, d.width, d.height);
-
-		if (numGhost > MAX_GHOSTS) {
-			t.stop();
-			g2d.drawString("Congrats, you won!\nPress s to restart", 130, 180); // DOES THIS WORK?
-		}
 
 		// draw grid
 		g2d.setColor(Color.green);
@@ -483,6 +479,14 @@ public class Board extends JPanel implements ActionListener {
 
 		if (inGame == false) {
 			showOntoScreen(g2d);
+		}
+		
+		if (numGhost > MAX_GHOSTS) {
+			t.stop();
+			inGame = false;
+			String win = "Congrats, you won!";
+			g2d.setColor(Color.white);
+			g2d.drawString(win, 130, 200);
 		}
 	}
 

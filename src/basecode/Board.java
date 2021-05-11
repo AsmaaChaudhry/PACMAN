@@ -23,7 +23,7 @@ public class Board extends JPanel implements ActionListener {
 
 	private Dimension d;
 	private int livesLeft, score;
-	private int posX, posY, nextPosX, nextPosY; // put in PacMan class
+	private int posX, posY, nextPosX, nextPosY;
 
 	private Timer t;
 
@@ -31,9 +31,8 @@ public class Board extends JPanel implements ActionListener {
 	private Image livesIcon = new ImageIcon("src/images/PacManResting.png").getImage();
 	private Image pellet = new ImageIcon("src/images/Pellet.png").getImage();
 	private Image removedPellet = new ImageIcon("src/images/removedPellet.png").getImage();
-	// make a test ghost
 	
-	private Ghost blueGhost1 = new Ghost("src/images/blueGhost1.gif", 50, 150, 5);
+	private Ghost blueGhost1 = new Ghost("src/images/blueGhost1.gif", 50, 150, 5); // make setters for xy to update the ghost respawn points 
     private Ghost blueGhost2 = new Ghost("src/images/blueGhost2.gif", 60, 160, 6);
     private Ghost greenGhost1 = new Ghost("src/images/greenGhost1.gif", 70, 170, 5);
     private Ghost greenGhost2 = new Ghost("src/images/greenGhost2.gif", 80, 180, 4);
@@ -53,9 +52,7 @@ public class Board extends JPanel implements ActionListener {
 	private final int NUM_BLOCKS = 15;
 	private final int MAX_GHOSTS = 12;
 	public int counter = 0;
-	private int numLevel;
-	private int numGhost;
-	private int newGhosts;
+	private int numGhost; // num for current level
 	public boolean inGame = false;
 	public boolean paused = false;
 
@@ -114,7 +111,6 @@ public class Board extends JPanel implements ActionListener {
 		setFocusable(true);
 		setBackground(Color.white);
 		t = new Timer(40, this);
-		// t.start();
 
 		bSize = Math.min(360 / 15, 360 / 15);
 		movement = bSize / 4;
@@ -125,7 +121,26 @@ public class Board extends JPanel implements ActionListener {
 	public static int[][] getGrid() {
 		return grid;
 	}
+	
+	private boolean checkLevelClear() {
+		for(int c = 0; c < 15; c++) {
+			for(int r = 0; r < 15; r++) {
+				if(grid2[c][r] == true) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 
+	/**
+	 * This method checks if a proposed move for Pac-Man is valid.
+	 * 
+	 * @param x the x-coordinate
+	 * @param y the y-coordinate
+	 * @param grid  the game board
+	 * @return true or false if the move is valid or not
+	 */
 	private boolean checkGridMove(int x, int y, int[][] grid) {
 
 		int column = x / bSize;
@@ -147,7 +162,6 @@ public class Board extends JPanel implements ActionListener {
 				nextPosX = posX - movement - 12;
 				if (checkGridMove(nextPosX, posY, grid)) {
 					grid[gridC][gridR] -= 2;
-					//
 					posX -= movement;
 					gridC = posX / bSize;
 					grid[gridC][gridR] += 2;
@@ -157,30 +171,19 @@ public class Board extends JPanel implements ActionListener {
 					score++;
 
 				}
-
-				// is pellet eaten?
 				pacMan = new ImageIcon("src/images/PacManLeft.gif").getImage();
 
 			} else if (key == KeyEvent.VK_RIGHT && posX < d.width - 35 && t.isRunning()) {
 				nextPosX = posX + movement + 11;
-				System.out.println(gridC);
-				System.out.println(gridR);
-				System.out.println(grid2[gridC][gridR]);
-				System.out.println(checkGridMove(nextPosX, posY, grid));
 				if (checkGridMove(nextPosX, posY, grid)) {
 					grid[gridC][gridR] -= 2;
 					posX += movement;
 					gridC = posX / bSize;
 					grid[gridC][gridR] += 2;
-
 				}
 				if ((checkGridMove(nextPosX, posY, grid)) && (grid2[gridC][gridR])) {
 					grid2[gridC][gridR] = false;
 					score++;
-					System.out.println(gridC);
-					System.out.println(gridR);
-					System.out.println(grid2[gridC][gridR]);
-					System.out.println(checkGridMove(nextPosX, posY, grid));
 				}
 				pacMan = new ImageIcon("src/images/PacManRight.gif").getImage();
 
@@ -195,7 +198,6 @@ public class Board extends JPanel implements ActionListener {
 				if ((checkGridMove(nextPosX, posY, grid)) && (grid2[gridC][gridR])) {
 					grid2[gridC][gridR] = false;
 					score++;
-
 				}
 				pacMan = new ImageIcon("src/images/PacManUp.gif").getImage();
 
@@ -210,7 +212,6 @@ public class Board extends JPanel implements ActionListener {
 				if ((checkGridMove(nextPosX, posY, grid)) && (grid2[gridC][gridR])) {
 					grid2[gridC][gridR] = false;
 					score++;
-
 				}
 				pacMan = new ImageIcon("src/images/PacManDown.gif").getImage();
 
@@ -234,15 +235,7 @@ public class Board extends JPanel implements ActionListener {
 					startGame();
 					inGame = true;
 				}
-
-				// if ((posX == 10) && (posY == 10) && (t.isRunning())){
-				// t.stop();
-				//
-				// }
-				//
-
 			}
-
 			repaint();
 		}
 
@@ -260,9 +253,7 @@ public class Board extends JPanel implements ActionListener {
 		t.start();
 		score = 0;
 		livesLeft = 3;
-		numLevel = 1;
 		numGhost = 2;
-		newGhosts = -1;
 		initLevel();
 
 	}
@@ -273,35 +264,34 @@ public class Board extends JPanel implements ActionListener {
 				grid2[i][j] = GRID3[i][j];
 			}
 		}
+		
 		posX = 10;
 		posY = 10;
 
 		gridC = posX / bSize;
 		gridR = posY / bSize;
-		newGhosts++;
 		
-		if (newGhosts == 1) {
+		if (numGhost == 3) {
 			mauveGhost.setActive(true);
-		} else if (newGhosts == 2) {
+		} else if (numGhost == 4) {
 			tealGhost.setActive(true);
-		} else if (newGhosts == 3) {
+		} else if (numGhost == 5) {
 			greenGhost2.setActive(true);
-		} else if (newGhosts == 4) {
+		} else if (numGhost == 6) {
 			whiteGhost.setActive(true);
-		} else if (newGhosts == 5) {
+		} else if (numGhost == 7) {
 			blueGhost2.setActive(true);
-		} else if (newGhosts == 6) {
+		} else if (numGhost == 8) {
 			pinkGhost.setActive(true);
-		} else if (newGhosts == 7) {
+		} else if (numGhost == 9) {
 			purpleGhost.setActive(true);
-		} else if (newGhosts == 8) {
+		} else if (numGhost == 10) {
 			redGhost.setActive(true);
-		} else if (newGhosts == 9) {
+		} else if (numGhost == 11) {
 			greenGhost2.setActive(true);
-		} else if (newGhosts == 10) {
+		} else if (numGhost == 12) {
 			orangeGhost.setActive(true);
 		}
-		
 		repaint();
 	}
 
@@ -315,13 +305,9 @@ public class Board extends JPanel implements ActionListener {
 		g2d.setColor(Color.black);
 		g2d.fillRect(0, 0, d.width, d.height);
 
-		if (score > 1 && score % 181 == 0) {
-			numLevel++;
-			initLevel();
-		}
-
 		if (numGhost > MAX_GHOSTS) {
-			g2d.drawString("Congrats, you won!!", 130, 180);
+			t.stop();
+			g2d.drawString("Congrats, you won!\nPress s to restart", 130, 180); // DOES THIS WORK?
 		}
 
 		// draw grid
@@ -341,74 +327,148 @@ public class Board extends JPanel implements ActionListener {
 		grid[0][0] = 1;// Remove the first block at the start
 		for (int i = 0; i < NUM_BLOCKS; i++) {
 			for (int j = 0; j < NUM_BLOCKS; j++) {
-
 				if (grid[i][j] == -1) {
 					g2d.fillRoundRect((i * bSize) + 10, (j * bSize) + 10, bSize, bSize, 1, 1);
-
-				} // draw wall
+				}
 			}
 		}
-
+		
+		// draw pac man
 		g2d.drawImage(pacMan, posX, posY, this);
-		// draw the test ghost
+		// add and draw the test ghosts
+		ghosts.add(blueGhost1);
+		ghosts.add(yellowGhost);
 		g2d.drawImage(blueGhost1.getIcon(), blueGhost1.getGhostX(), blueGhost1.getGhostY(), this);
 		blueGhost1.setActive(true);
 
 		g2d.drawImage(yellowGhost.getIcon(), yellowGhost.getGhostX(), yellowGhost.getGhostY(), this);
 		yellowGhost.setActive(true);
 		
-		ghosts.add(blueGhost1);
-		ghosts.add(yellowGhost);
-		
-		if (mauveGhost.getActive()) {
-			ghosts.add(mauveGhost);
-			g2d.drawImage(mauveGhost.getIcon(), mauveGhost.getGhostX(), mauveGhost.getGhostY(), this);
-		} if (tealGhost.getActive()) {
-			ghosts.add(tealGhost);
-			g2d.drawImage(tealGhost.getIcon(), tealGhost.getGhostX(), tealGhost.getGhostY(), this);
-		}
-		
-		/*if (newGhosts >= 1) {
-			g2d.drawImage(mauveGhost.getIcon(), mauveGhost.getGhostX(), mauveGhost.getGhostY(), this);
-			mauveGhost.setActive(true);
-			ghosts.add(mauveGhost);
-		} if (newGhosts >= 2) {
-			g2d.drawImage(tealGhost.getIcon(), tealGhost.getGhostX(), tealGhost.getGhostY(), this);
-			tealGhost.setActive(true);
-			ghosts.add(tealGhost);
-		} if (newGhosts >= 3) {
-			g2d.drawImage(greenGhost1.getIcon(), greenGhost1.getGhostX(), greenGhost1.getGhostY(), this);
-			greenGhost1.setActive(true);
-			ghosts.add(greenGhost1);
-		} if (newGhosts >= 4) {
-			g2d.drawImage(whiteGhost.getIcon(), whiteGhost.getGhostX(), whiteGhost.getGhostY(), this);
-			whiteGhost.setActive(true);
-			ghosts.add(whiteGhost);
-		} if (newGhosts >= 5) {
-			g2d.drawImage(blueGhost2.getIcon(), blueGhost2.getGhostX(), blueGhost2.getGhostY(), this);
-			blueGhost2.setActive(true);
+		if (numGhost == 3) {
 			ghosts.add(blueGhost2);
-		} if (newGhosts >= 6) {
-			g2d.drawImage(pinkGhost.getIcon(), pinkGhost.getGhostX(), pinkGhost.getGhostY(), this);
-			pinkGhost.setActive(true);
-			ghosts.add(pinkGhost);
-		} if (newGhosts >= 7) {
-			g2d.drawImage(purpleGhost.getIcon(), purpleGhost.getGhostX(), purpleGhost.getGhostY(), this);
-			purpleGhost.setActive(true);
-			ghosts.add(purpleGhost);
-		} if (newGhosts >= 8) {
-			g2d.drawImage(redGhost.getIcon(), redGhost.getGhostX(), redGhost.getGhostY(), this);
-			redGhost.setActive(true);
-			ghosts.add(redGhost);
-		} if (newGhosts >= 9) {
-			g2d.drawImage(greenGhost2.getIcon(), greenGhost2.getGhostX(), greenGhost2.getGhostY(), this);
-			greenGhost2.setActive(true);
+			
+			for (Ghost ghost: ghosts) {
+				g2d.drawImage(ghost.getIcon(), ghost.getGhostX(), ghost.getGhostY(), this);
+				ghost.setActive(true);
+			}
+		}
+		else if (numGhost == 4) {
+			ghosts.add(blueGhost2);
+			ghosts.add(greenGhost1);
+			
+			for (Ghost ghost: ghosts) {
+				g2d.drawImage(ghost.getIcon(), ghost.getGhostX(), ghost.getGhostY(), this);
+				ghost.setActive(true);
+			}
+		}
+		else if (numGhost == 5) {
+			ghosts.add(blueGhost2);
+			ghosts.add(greenGhost1);
 			ghosts.add(greenGhost2);
-		} if (newGhosts >= 10) {
-			g2d.drawImage(orangeGhost.getIcon(), orangeGhost.getGhostX(), orangeGhost.getGhostY(), this);
-			orangeGhost.setActive(true);
+			
+			for (Ghost ghost: ghosts) {
+				g2d.drawImage(ghost.getIcon(), ghost.getGhostX(), ghost.getGhostY(), this);
+				ghost.setActive(true);
+			}
+		}
+		else if (numGhost == 6) {
+			ghosts.add(blueGhost2);
+			ghosts.add(greenGhost1);
+			ghosts.add(greenGhost2);
+			ghosts.add(mauveGhost);
+			
+			for (Ghost ghost: ghosts) {
+				g2d.drawImage(ghost.getIcon(), ghost.getGhostX(), ghost.getGhostY(), this);
+				ghost.setActive(true);
+			}
+		}
+		else if (numGhost == 7) {
+			ghosts.add(blueGhost2);
+			ghosts.add(greenGhost1);
+			ghosts.add(greenGhost2);
+			ghosts.add(mauveGhost);
 			ghosts.add(orangeGhost);
-		}*/
+			
+			for (Ghost ghost: ghosts) {
+				g2d.drawImage(ghost.getIcon(), ghost.getGhostX(), ghost.getGhostY(), this);
+				ghost.setActive(true);
+			}
+		} 
+		else if (numGhost == 8) {
+			ghosts.add(blueGhost2);
+			ghosts.add(greenGhost1);
+			ghosts.add(greenGhost2);
+			ghosts.add(mauveGhost);
+			ghosts.add(orangeGhost);
+			ghosts.add(pinkGhost);
+			
+			for (Ghost ghost: ghosts) {
+				g2d.drawImage(ghost.getIcon(), ghost.getGhostX(), ghost.getGhostY(), this);
+				ghost.setActive(true);
+			}
+		} 
+		else if (numGhost == 9) {
+			ghosts.add(blueGhost2);
+			ghosts.add(greenGhost1);
+			ghosts.add(greenGhost2);
+			ghosts.add(mauveGhost);
+			ghosts.add(orangeGhost);
+			ghosts.add(pinkGhost);
+			ghosts.add(purpleGhost);
+			
+			for (Ghost ghost: ghosts) {
+				g2d.drawImage(ghost.getIcon(), ghost.getGhostX(), ghost.getGhostY(), this);
+				ghost.setActive(true);
+			}
+		}
+		else if (numGhost == 10) {
+			ghosts.add(blueGhost2);
+			ghosts.add(greenGhost1);
+			ghosts.add(greenGhost2);
+			ghosts.add(mauveGhost);
+			ghosts.add(orangeGhost);
+			ghosts.add(pinkGhost);
+			ghosts.add(purpleGhost);
+			ghosts.add(redGhost);
+			
+			for (Ghost ghost: ghosts) {
+				g2d.drawImage(ghost.getIcon(), ghost.getGhostX(), ghost.getGhostY(), this);
+				ghost.setActive(true);
+			}
+		} 
+		else if (numGhost == 11) {
+			ghosts.add(blueGhost2);
+			ghosts.add(greenGhost1);
+			ghosts.add(greenGhost2);
+			ghosts.add(mauveGhost);
+			ghosts.add(orangeGhost);
+			ghosts.add(pinkGhost);
+			ghosts.add(purpleGhost);
+			ghosts.add(redGhost);
+			ghosts.add(tealGhost);
+			
+			for (Ghost ghost: ghosts) {
+				g2d.drawImage(ghost.getIcon(), ghost.getGhostX(), ghost.getGhostY(), this);
+				ghost.setActive(true);
+			}
+		} 
+		else if(numGhost == 12) {
+			ghosts.add(blueGhost2);
+			ghosts.add(greenGhost1);
+			ghosts.add(greenGhost2);
+			ghosts.add(mauveGhost);
+			ghosts.add(orangeGhost);
+			ghosts.add(pinkGhost);
+			ghosts.add(purpleGhost);
+			ghosts.add(redGhost);
+			ghosts.add(tealGhost);
+			ghosts.add(whiteGhost);
+			
+			for (Ghost ghost: ghosts) {
+				g2d.drawImage(ghost.getIcon(), ghost.getGhostX(), ghost.getGhostY(), this);
+				ghost.setActive(true);
+			}
+		}
 
 		g2d.setFont(smallFont);
 		g2d.setColor(Color.white);
@@ -424,6 +484,7 @@ public class Board extends JPanel implements ActionListener {
 		if (inGame == false) {
 			showOntoScreen(g2d);
 		}
+	}
 
 
 	@Override
@@ -432,6 +493,12 @@ public class Board extends JPanel implements ActionListener {
 		if (counter > 500) {
 			counter = 0;
 		}
+		
+		if(checkLevelClear()) {
+			numGhost++;
+			initLevel();
+		}
+		
 		// update ghost position
 		
 		if (blueGhost1.getActive()) {
@@ -460,51 +527,50 @@ public class Board extends JPanel implements ActionListener {
 			yellowGhost.move(counter);
 		}
 		counter++;
-		repaint();}
+		repaint();
 
 
-		for (Ghost ghost: ghosts) {
-			if (checkCollision(posX, posY, ghost)) {
-				livesLeft--;
-				if (livesLeft == 0) {
-				inGame = false;
-				ghost.setActive(false);
-				//break;
-				startGame();
-				}
-				
-				posX = 10;
-				posY = 10;
-				gridC = posX/bSize;
-				gridR = posY/bSize;
-				
-				if (blueGhost1.getActive()) {
-					blueGhost1 = new Ghost("src/images/blueGhost1.gif", 50, 150, 5);
-				} if (blueGhost2.getActive()) {
-					blueGhost2 = new Ghost("src/images/blueGhost2.gif", 60, 160, 6);
-				} if (greenGhost1.getActive()) {
-					greenGhost1 = new Ghost("src/images/greenGhost1.gif", 70, 170, 5);
-				} if (greenGhost2.getActive()) {
-					greenGhost2 = new Ghost("src/images/greenGhost2.gif", 80, 180, 4);
-				} if (mauveGhost.getActive()) {
-					mauveGhost = new Ghost("src/images/mauveGhost.gif", 90, 190, 3);
-				} if (orangeGhost.getActive()) {
-					orangeGhost = new Ghost("src/images/orangeGhost.gif", 100, 200, 2);
-				} if (pinkGhost.getActive()) {
-					pinkGhost = new Ghost("src/images/pinkGhost.gif", 110, 210, 5);
-				} if (purpleGhost.getActive()) {
-					purpleGhost = new Ghost("src/images/purpleGhost.gif", 120, 220, 6);
-				} if (redGhost.getActive()) {
-					redGhost = new Ghost("src/images/redGhost.gif", 130, 230, 4);
-				} if (tealGhost.getActive()) {
-					tealGhost = new Ghost("src/images/tealGhost.gif", 140, 240, 3);
-				} if (whiteGhost.getActive()) {
-					whiteGhost = new Ghost("src/images/whiteGhost.gif", 150, 250, 5);
-				} if (yellowGhost.getActive()) {
-					yellowGhost = new Ghost("src/images/yellowGhost.gif", 160, 150, 5);
-				}
-			}
-		}
+//		for (Ghost ghost: ghosts) {
+//			if (checkCollision(posX, posY, ghost)) {
+//				livesLeft--;
+//				if (livesLeft == 0) {
+//					inGame = false;
+//					ghost.setActive(false);
+//					t.stop();
+//				}
+//				
+//				posX = 10;
+//				posY = 10;
+//				gridC = posX/bSize;
+//				gridR = posY/bSize;
+//				
+//				if (blueGhost1.getActive()) {
+//					blueGhost1 = new Ghost("src/images/blueGhost1.gif", 50, 150, 5);
+//				} if (blueGhost2.getActive()) {
+//					blueGhost2 = new Ghost("src/images/blueGhost2.gif", 60, 160, 6);
+//				} if (greenGhost1.getActive()) {
+//					greenGhost1 = new Ghost("src/images/greenGhost1.gif", 70, 170, 5);
+//				} if (greenGhost2.getActive()) {
+//					greenGhost2 = new Ghost("src/images/greenGhost2.gif", 80, 180, 4);
+//				} if (mauveGhost.getActive()) {
+//					mauveGhost = new Ghost("src/images/mauveGhost.gif", 90, 190, 3);
+//				} if (orangeGhost.getActive()) {
+//					orangeGhost = new Ghost("src/images/orangeGhost.gif", 100, 200, 2);
+//				} if (pinkGhost.getActive()) {
+//					pinkGhost = new Ghost("src/images/pinkGhost.gif", 110, 210, 5);
+//				} if (purpleGhost.getActive()) {
+//					purpleGhost = new Ghost("src/images/purpleGhost.gif", 120, 220, 6);
+//				} if (redGhost.getActive()) {
+//					redGhost = new Ghost("src/images/redGhost.gif", 130, 230, 4);
+//				} if (tealGhost.getActive()) {
+//					tealGhost = new Ghost("src/images/tealGhost.gif", 140, 240, 3);
+//				} if (whiteGhost.getActive()) {
+//					whiteGhost = new Ghost("src/images/whiteGhost.gif", 150, 250, 5);
+//				} if (yellowGhost.getActive()) {
+//					yellowGhost = new Ghost("src/images/yellowGhost.gif", 160, 150, 5);
+//				}
+//			}
+//		}
 	}
 
     /**
@@ -523,9 +589,7 @@ public class Board extends JPanel implements ActionListener {
 		int gCY = (ghostY + ghostY + (ghostY - 22) + (ghostY - 22)) / 4;
 		int squared = ((pCX - gCX) * (pCX - gCX)) + ((pCY - gCY) * (pCY - gCY));
 		double distance = Math.sqrt(squared);
-		// System.out.println(distance);
 		if (distance < 20.0) {
-			System.out.println("Collision");
 			return true;
 		}
 		return false;

@@ -592,6 +592,7 @@ public class Board extends JPanel implements ActionListener {
 		if (distance < 20.0) {
 			return true;
 		}
+		System.out.println("Collision");
 		return false;
 	}
 

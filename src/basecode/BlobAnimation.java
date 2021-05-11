@@ -8,6 +8,8 @@ import javax.swing.JFrame;
 
 /**
  * This class creates a JFrame window for the PACMAN game.
+ * 
+ * @author TIGERFISH TEAM
  */
 public class BlobAnimation extends JFrame {
 	// window dimensions

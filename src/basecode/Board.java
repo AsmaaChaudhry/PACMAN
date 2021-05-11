@@ -19,7 +19,9 @@ import javax.swing.Timer;
 
 /**
  * Board class manages the GUI, game interactions, and takes in keyboard
- * actions. * @author TIGERFISH TEAM
+ * actions.
+ * 
+ * * @author TIGERFISH TEAM
  */
 public class Board extends JPanel implements ActionListener {
 
@@ -28,8 +30,8 @@ public class Board extends JPanel implements ActionListener {
 	// Number of times able to play after collision with ghost and number of pellets
 	// eaten
 	private int livesLeft, score;
-	// pacman x and y positions, x and y positions pacman will move into next
-	private int posX, posY, nextPosX, nextPosY;
+	// pacman x and y positions
+	private int posX, posY;
 
 	private Timer t;
 
@@ -139,6 +141,7 @@ public class Board extends JPanel implements ActionListener {
 		// timer for game
 		t = new Timer(40, this);
 
+		// standardizes block and grid values
 		bSize = Math.min(360 / 15, 360 / 15);
 		movement = bSize / 4;
 		gridC = posX / bSize;
@@ -182,11 +185,17 @@ public class Board extends JPanel implements ActionListener {
 
 		int column = x / bSize;
 		int row = y / bSize;
-		// if something is -1 it is the maze, so invalid
-		if (grid[column][row] == -1) {
+		// if something is -1 it is the maze, it's an invalid moves
+		try {
+
+			if (grid[column][row] != -1) {
+				return true;
+			}
+		} catch (ArrayIndexOutOfBoundsException e) {
 			return false;
 		}
-		return true;
+
+		return false;
 	}
 
 	class Keyboard extends KeyAdapter {
@@ -204,15 +213,20 @@ public class Board extends JPanel implements ActionListener {
 			int key = e.getKeyCode();
 
 			if (key == KeyEvent.VK_LEFT && posX > 10 && t.isRunning()) {// For the left arrow key
-				nextPosX = posX - movement - 12;
-				if (checkGridMove(nextPosX, posY, grid)) {// checks to if the newest left position is a wall, if not a
-															// wall it allow pacman to move into the new left space
+				if (checkGridMove(posX - movement - 12, posY, grid)) {// checks to if the newest left position is a
+																		// wall, if not a wall it allow pacman to move
+																		// into the new left space
 					grid[gridC][gridR] -= 2;
 					posX -= movement;
 					gridC = posX / bSize;
 					grid[gridC][gridR] += 2;
 				}
-				if ((checkGridMove(nextPosX, posY, grid)) && (grid2[gridC][gridR])) {
+				if ((checkGridMove(posX - movement - 12, posY, grid)) && (grid2[gridC][gridR])) {// checks to if the
+																									// newest right
+					// position is a wall, if not a
+					// wall and if the grid position
+					// in grid 2 is true, there's
+					// a pellet in that space
 					grid2[gridC][gridR] = false;
 					score++;
 
@@ -221,39 +235,43 @@ public class Board extends JPanel implements ActionListener {
 																				// postion
 
 			} else if (key == KeyEvent.VK_RIGHT && posX < d.width - 35 && t.isRunning()) {// For the right arrow key
-				nextPosX = posX + movement + 11;
-				if (checkGridMove(nextPosX, posY, grid)) {// checks to if the newest right position is a wall, if not a
-															// wall it allow pacman to move into the new right space
-					grid[gridC][gridR] -= 2;// updates the current grid position with Pacman's vaule
+				if (checkGridMove(posX + movement + 11, posY, grid)) {// checks to if the newest right position is a
+																		// wall, if not a wall it allow pacman to move
+																		// into the new right space
+					grid[gridC][gridR] -= 2;// updates the current grid position with Pacman's value
 					posX += movement;
 					gridC = posX / bSize;
 					grid[gridC][gridR] += 2;
 				}
-				if ((checkGridMove(nextPosX, posY, grid)) && (grid2[gridC][gridR])) {// checks to if the newest right
-																						// position is a wall, if not a
-																						// wall and if the grid position
-																						// //in grid 2 is true, there's
-																						// a pellet in that space
+				if ((checkGridMove(posX + movement + 11, posY, grid)) && (grid2[gridC][gridR])) {// checks to if the
+																									// newest right
+					// position is a wall, if not a
+					// wall and if the grid position
+					// in grid 2 is true, there's
+					// a pellet in that space
+					grid2[gridC][gridR] = false;
 					grid2[gridC][gridR] = false;
 					score++;
 				}
 				pacMan = new ImageIcon("src/images/PacManRight.gif").getImage();// creates a pacman icon for the new
-																				// postion
+																				// position
 
 			} else if (key == KeyEvent.VK_UP && posY > 10 && t.isRunning()) {// For the up arrow key
-				nextPosY = posY - movement - 12;
-				if (checkGridMove(posX, nextPosY, grid)) { // checks to if the newest up position is a wall, if not a
-															// wall it allow pacman to move into the new up space
+				if (checkGridMove(posX, posY - movement - 12, grid)) { // checks to if the newest up position is a wall,
+																		// if not a wall it allow pacman to move into
+																		// the new up space
 					grid[gridC][gridR] -= 2;// updates the current grid position with Pacman's vaule
 					posY -= movement;
 					gridR = posY / bSize;
 					grid[gridC][gridR] += 2;
 				}
-				if ((checkGridMove(nextPosX, posY, grid)) && (grid2[gridC][gridR])) {// checks to if the newest up
-																						// position is a wall, if not a
-																						// wall and if the grid position
-																						// //in grid 2 is true, there's
-																						// a pellet in that space
+				if ((checkGridMove(posX, posY - movement - 12, grid)) && (grid2[gridC][gridR])) {// checks to if the
+																									// newest right
+					// position is a wall, if not a
+					// wall and if the grid position
+					// in grid 2 is true, there's
+					// a pellet in that space
+					grid2[gridC][gridR] = false;
 
 					grid2[gridC][gridR] = false;
 					score++;
@@ -262,18 +280,20 @@ public class Board extends JPanel implements ActionListener {
 																				// postion
 
 			} else if (key == KeyEvent.VK_DOWN && posY < d.height - 75 && t.isRunning()) {// For the down arrow key
-				nextPosY = posY + movement + 10;
-				if (checkGridMove(posX, nextPosY, grid)) {// checks to if the newest up position is a wall, if not a
-															// wall it allow pacman to move into the new up space
-					grid[gridC][gridR] -= 2;// updates the current grid position with Pacman's vaule
+				if (checkGridMove(posX, posY + movement + 10, grid)) {// checks to if the newest up position is a wall,
+																		// if not a wall it allow pacman to move into
+																		// the new up space
+					grid[gridC][gridR] -= 2;// updates the current grid position with Pacman's value
 					posY += movement;
 					gridR = posY / bSize;
 					grid[gridC][gridR] += 2;
 				}
-				if ((checkGridMove(nextPosX, posY, grid)) && (grid2[gridC][gridR])) {// checks to if the newest up
-																						// position is a wall, if not a
-																						// wall and if the grid position
-					// in grid 2 is true, there's a pellet in that space
+				if ((checkGridMove(posX, posY + movement + 10, grid)) && (grid2[gridC][gridR])) {// checks to if the
+																									// newest up
+					// position is a wall, if not a
+					// wall and if the grid position
+					// in grid 2 is true, there's
+					// a pellet in that space
 					grid2[gridC][gridR] = false;
 					score++;
 				}
@@ -621,47 +641,28 @@ public class Board extends JPanel implements ActionListener {
 		counter++;
 		repaint();
 
-//		for (Ghost ghost: ghosts) {
-//			if (checkCollision(posX, posY, ghost)) {
-//				livesLeft--;
-//				if (livesLeft == 0) {
-//					inGame = false;
-//					ghost.setActive(false);
-//					t.stop();
-//				}
-//				
-//				posX = 10;
-//				posY = 10;
-//				gridC = posX/bSize;
-//				gridR = posY/bSize;
-//				
-//				if (blueGhost1.getActive()) {
-//					blueGhost1 = new Ghost("src/images/blueGhost1.gif", 50, 150, 5);
-//				} if (blueGhost2.getActive()) {
-//					blueGhost2 = new Ghost("src/images/blueGhost2.gif", 60, 160, 6);
-//				} if (greenGhost1.getActive()) {
-//					greenGhost1 = new Ghost("src/images/greenGhost1.gif", 70, 170, 5);
-//				} if (greenGhost2.getActive()) {
-//					greenGhost2 = new Ghost("src/images/greenGhost2.gif", 80, 180, 4);
-//				} if (mauveGhost.getActive()) {
-//					mauveGhost = new Ghost("src/images/mauveGhost.gif", 90, 190, 3);
-//				} if (orangeGhost.getActive()) {
-//					orangeGhost = new Ghost("src/images/orangeGhost.gif", 100, 200, 2);
-//				} if (pinkGhost.getActive()) {
-//					pinkGhost = new Ghost("src/images/pinkGhost.gif", 110, 210, 5);
-//				} if (purpleGhost.getActive()) {
-//					purpleGhost = new Ghost("src/images/purpleGhost.gif", 120, 220, 6);
-//				} if (redGhost.getActive()) {
-//					redGhost = new Ghost("src/images/redGhost.gif", 130, 230, 4);
-//				} if (tealGhost.getActive()) {
-//					tealGhost = new Ghost("src/images/tealGhost.gif", 140, 240, 3);
-//				} if (whiteGhost.getActive()) {
-//					whiteGhost = new Ghost("src/images/whiteGhost.gif", 150, 250, 5);
-//				} if (yellowGhost.getActive()) {
-//					yellowGhost = new Ghost("src/images/yellowGhost.gif", 160, 150, 5);
-//				}
-//			}
-//		}
+		for (Ghost ghost : ghosts) {
+			if (checkCollision(posX, posY, ghost)) {
+				livesLeft--;
+				if (livesLeft == 0) {
+					inGame = false;
+					ghost.setActive(false);
+					t.stop();
+				}
+
+				posX = 10;
+				posY = 10;
+				gridC = posX / bSize;
+				gridR = posY / bSize;
+
+				for (Ghost g : ghosts) {
+					if (g.getActive()) {
+						g.setSpawn();
+					}
+				}
+
+			}
+		}
 	}
 
 	/**
@@ -685,7 +686,7 @@ public class Board extends JPanel implements ActionListener {
 		int squared = ((pCX - gCX) * (pCX - gCX)) + ((pCY - gCY) * (pCY - gCY));
 		// find distance between centers
 		double distance = Math.sqrt(squared);
-		// if cloe together then there is a collision
+		// if close together then there is a collision
 		if (distance < 20.0) {
 			return true;
 		}

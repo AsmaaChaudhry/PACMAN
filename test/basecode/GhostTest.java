@@ -2,6 +2,12 @@ package basecode;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Contains JUnit tests for Ghost.java class.
+ * 
+ *  @author TIGERFISH TEAM
+ */
+
 import org.junit.jupiter.api.Test;
 
 class GhostTest {

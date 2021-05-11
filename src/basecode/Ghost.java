@@ -6,9 +6,12 @@ import javax.swing.ImageIcon;
 
 /**
  * The class defines a ghost instance so that each ghost can move independently.
- *
+ * 
+ * @author TIGERFISH TEAM
  */
 public class Ghost {
+	public int spawnX;
+	public int spawnY;
 	public int ghostX;
 	public int ghostY;
 	public String imagePath;
@@ -18,15 +21,19 @@ public class Ghost {
 	private int maxDir = 4;
 	private boolean active = false;
 
-	public Ghost(String imagePath, int ghostX, int ghostY) {
-		this.ghostX = ghostX;
-		this.ghostY = ghostY;
+	public Ghost(String imagePath, int spawnX, int spawnY) {
+		this.spawnX = spawnX;
+		this.spawnY = spawnY;
+		this.ghostX = spawnX;
+		this.ghostY = spawnY;
 		this.imagePath = imagePath;
 	}
 
-	public Ghost(String imagePath, int ghostX, int ghostY, int speed) {
-		this.ghostX = ghostX;
-		this.ghostY = ghostY;
+	public Ghost(String imagePath, int spawnX, int spawnY, int speed) {
+		this.spawnX = spawnX;
+		this.spawnY = spawnY;
+		this.ghostX = spawnX;
+		this.ghostY = spawnY;
 		this.imagePath = imagePath;
 		this.speed = speed;
 	}
@@ -49,6 +56,17 @@ public class Ghost {
 
 	public boolean getActive() {
 		return this.active;
+	}
+	
+	/**
+	 * setSpawn() resets a ghost's location to it's spawn point
+	 * 
+	 * @param x x-spawn coordinate
+	 * @param y y-spawn coordinate
+	 */
+	protected void setSpawn() {
+		this.ghostX = this.spawnX;
+		this.ghostY = this.spawnY;
 	}
 
 	/**
